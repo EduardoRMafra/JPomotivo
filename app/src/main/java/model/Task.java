@@ -9,7 +9,6 @@ import java.util.Date;
 public class Task {
     private int id;
     private int idUser;
-    private int idSchedule;
     private String name;
     private String description;
     private boolean completed;
@@ -18,10 +17,13 @@ public class Task {
     private Date createdAt;
     private Date updatedAt;
 
-    public Task(int id, int idUser, int idSchedule, String name, String description, boolean completed, String notes, Date deadline, Date createdAt, Date updatedAt) {
+    public Task() {
+    }
+    
+    
+    public Task(int id, int idUser, String name, String description, boolean completed, String notes, Date deadline, Date createdAt, Date updatedAt) {
         setId(id);
         setIdUser(idUser);
-        setIdSchedule(idSchedule);
         setName(name);
         setDescription(description);
         setCompleted(completed);
@@ -45,14 +47,6 @@ public class Task {
 
     public void setIdUser(int idUser) {
         this.idUser = idUser;
-    }
-
-    public int getIdSchedule() {
-        return idSchedule;
-    }
-
-    public void setIdSchedule(int idSchedule) {
-        this.idSchedule = idSchedule;
     }
 
     public String getName() {
