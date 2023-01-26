@@ -13,18 +13,22 @@ public class Schedule {
     private String description;
     private Date createdAt;
     private Date updatedAt;
-    private int working;
+    private boolean active;
     private int shortBreak;
     private int bigBreak;
 
-    public Schedule(int id, int idUser, String name, String description, Date createdAt, Date updatedAt, int working, int shortBreak, int bigBreak) {
+    public Schedule() {
+    }
+
+    
+    public Schedule(int id, int idUser, String name, String description, Date createdAt, Date updatedAt, boolean active, int shortBreak, int bigBreak) {
         setId(id);
         setIdUser(idUser);
         setName(name);
         setDescription(description);
         setCreatedAt(createdAt);
         setUpdatedAt(updatedAt);
-        setWorking(working);
+        setActive(active);
         setShortBreak(shortBreak);
         setBigBreak(bigBreak);
     }
@@ -77,12 +81,12 @@ public class Schedule {
         this.updatedAt = updatedAt;
     }
 
-    public int getWorking() {
-        return working;
+    public boolean isActive() {
+        return active;
     }
 
-    public void setWorking(int working) {
-        this.working = working;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public int getShortBreak() {
@@ -103,7 +107,7 @@ public class Schedule {
 
     @Override
     public String toString() {
-        return "Schedule{" + "id=" + id + ", idUser=" + idUser + ", name=" + name + ", description=" + description + ", createAt=" + createdAt + ", updatedAt=" + updatedAt + ", working=" + working + ", shortBreak=" + shortBreak + ", bigBreak=" + bigBreak + '}';
+        return "Schedule{" + "id=" + id + ", idUser=" + idUser + ", name=" + name + ", description=" + description + ", createAt=" + createdAt + ", updatedAt=" + updatedAt + ", active=" + active + ", shortBreak=" + shortBreak + ", bigBreak=" + bigBreak + '}';
     }
     
     
