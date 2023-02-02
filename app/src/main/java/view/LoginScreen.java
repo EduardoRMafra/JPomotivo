@@ -44,8 +44,9 @@ public class LoginScreen extends javax.swing.JFrame {
         jPanelTitle.setBackground(new java.awt.Color(0, 0, 0));
 
         jLabelTitle.setFont(new java.awt.Font("Comic Sans MS", 1, 48)); // NOI18N
+        jLabelTitle.setForeground(new java.awt.Color(255, 255, 255));
         jLabelTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelTitle.setIcon(new javax.swing.ImageIcon("D:\\Imagem\\tomatePomodoro.png")); // NOI18N
+        jLabelTitle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/appIcon.png"))); // NOI18N
         jLabelTitle.setText("Pomotivo");
 
         javax.swing.GroupLayout jPanelTitleLayout = new javax.swing.GroupLayout(jPanelTitle);
@@ -77,6 +78,7 @@ public class LoginScreen extends javax.swing.JFrame {
         jButtonSignIn.setText("Registrar");
         jButtonSignIn.setBorder(null);
         jButtonSignIn.setBorderPainted(false);
+        jButtonSignIn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         jPasswordField.setBackground(new java.awt.Color(255, 255, 255));
         jPasswordField.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
@@ -89,7 +91,7 @@ public class LoginScreen extends javax.swing.JFrame {
         jButtonLogin.setText("Logar");
         jButtonLogin.setBorder(null);
         jButtonLogin.setBorderPainted(false);
-        jButtonLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jButtonLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
