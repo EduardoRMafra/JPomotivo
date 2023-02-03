@@ -13,6 +13,7 @@ public class Schedule {
     private String description;
     private Date createdAt;
     private Date updatedAt;
+    private int timeWorking;
     private boolean active;
     private int shortBreak;
     private int bigBreak;
@@ -21,7 +22,7 @@ public class Schedule {
     }
 
     
-    public Schedule(int id, int idUser, String name, String description, Date createdAt, Date updatedAt, boolean active, int shortBreak, int bigBreak) {
+    public Schedule(int id, int idUser, String name, String description, Date createdAt, Date updatedAt, boolean active,int timeWorking, int shortBreak, int bigBreak) {
         setId(id);
         setIdUser(idUser);
         setName(name);
@@ -29,6 +30,7 @@ public class Schedule {
         setCreatedAt(createdAt);
         setUpdatedAt(updatedAt);
         setActive(active);
+        setTimeWorking(timeWorking);
         setShortBreak(shortBreak);
         setBigBreak(bigBreak);
     }
@@ -89,6 +91,14 @@ public class Schedule {
         this.active = active;
     }
 
+    public int getTimeWorking() {
+        return timeWorking;
+    }
+
+    public void setTimeWorking(int timeWorking) {
+        this.timeWorking = timeWorking;
+    }
+    
     public int getShortBreak() {
         return shortBreak;
     }

@@ -26,26 +26,22 @@ public class MainScreen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanelMain = new javax.swing.JPanel();
         jPanelTopBar = new javax.swing.JPanel();
         jPanelUser = new javax.swing.JPanel();
         jLabelUser = new javax.swing.JLabel();
         jPanelLeftBar = new javax.swing.JPanel();
         jPanelShowHide = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        jLabelShowHideBtn = new javax.swing.JLabel();
         jPanelHome = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        jLabelHomeBtn = new javax.swing.JLabel();
         jPanelTasks = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
+        jLabelTasksBtn = new javax.swing.JLabel();
         jPanelSchedules = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
+        jLabelSchedulesBtn = new javax.swing.JLabel();
         jPanelContent = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
-
-        jPanelMain.setBackground(new java.awt.Color(255, 255, 255));
-        jPanelMain.setLayout(new java.awt.BorderLayout());
 
         jPanelTopBar.setBackground(new java.awt.Color(0, 0, 0));
         jPanelTopBar.setPreferredSize(new java.awt.Dimension(64, 64));
@@ -88,92 +84,92 @@ public class MainScreen extends javax.swing.JFrame {
         jPanelShowHide.setBackground(new java.awt.Color(0, 0, 0));
         jPanelShowHide.setPreferredSize(new java.awt.Dimension(50, 50));
 
-        jLabel1.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/hideMenu.png"))); // NOI18N
-        jLabel1.setText("Diminuir");
-        jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jLabel1.setMaximumSize(new java.awt.Dimension(168, 64));
-        jLabel1.setMinimumSize(new java.awt.Dimension(138, 64));
-        jLabel1.setPreferredSize(new java.awt.Dimension(148, 64));
-        jLabel1.setRequestFocusEnabled(false);
+        jLabelShowHideBtn.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
+        jLabelShowHideBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/hideMenu.png"))); // NOI18N
+        jLabelShowHideBtn.setText("Diminuir");
+        jLabelShowHideBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabelShowHideBtn.setMaximumSize(new java.awt.Dimension(168, 64));
+        jLabelShowHideBtn.setMinimumSize(new java.awt.Dimension(138, 64));
+        jLabelShowHideBtn.setPreferredSize(new java.awt.Dimension(148, 64));
+        jLabelShowHideBtn.setRequestFocusEnabled(false);
 
         javax.swing.GroupLayout jPanelShowHideLayout = new javax.swing.GroupLayout(jPanelShowHide);
         jPanelShowHide.setLayout(jPanelShowHideLayout);
         jPanelShowHideLayout.setHorizontalGroup(
             jPanelShowHideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+            .addComponent(jLabelShowHideBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
         );
         jPanelShowHideLayout.setVerticalGroup(
             jPanelShowHideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, Short.MAX_VALUE)
+            .addComponent(jLabelShowHideBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 50, Short.MAX_VALUE)
         );
 
         jPanelHome.setBackground(new java.awt.Color(0, 0, 0));
         jPanelHome.setPreferredSize(new java.awt.Dimension(50, 50));
 
-        jLabel2.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/homeIcon.png"))); // NOI18N
-        jLabel2.setText("Início");
-        jLabel2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jLabel2.setMaximumSize(new java.awt.Dimension(168, 64));
-        jLabel2.setMinimumSize(new java.awt.Dimension(138, 64));
-        jLabel2.setPreferredSize(new java.awt.Dimension(148, 64));
-        jLabel2.setRequestFocusEnabled(false);
+        jLabelHomeBtn.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
+        jLabelHomeBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/homeIcon.png"))); // NOI18N
+        jLabelHomeBtn.setText("Início");
+        jLabelHomeBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabelHomeBtn.setMaximumSize(new java.awt.Dimension(168, 64));
+        jLabelHomeBtn.setMinimumSize(new java.awt.Dimension(138, 64));
+        jLabelHomeBtn.setPreferredSize(new java.awt.Dimension(148, 64));
+        jLabelHomeBtn.setRequestFocusEnabled(false);
 
         javax.swing.GroupLayout jPanelHomeLayout = new javax.swing.GroupLayout(jPanelHome);
         jPanelHome.setLayout(jPanelHomeLayout);
         jPanelHomeLayout.setHorizontalGroup(
             jPanelHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabelHomeBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanelHomeLayout.setVerticalGroup(
             jPanelHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, Short.MAX_VALUE)
+            .addComponent(jLabelHomeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 50, Short.MAX_VALUE)
         );
 
         jPanelTasks.setBackground(new java.awt.Color(0, 0, 0));
         jPanelTasks.setPreferredSize(new java.awt.Dimension(50, 50));
 
-        jLabel3.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/taskIcon.png"))); // NOI18N
-        jLabel3.setText("Tarefas");
-        jLabel3.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jLabel3.setMaximumSize(new java.awt.Dimension(168, 64));
-        jLabel3.setPreferredSize(new java.awt.Dimension(148, 64));
-        jLabel3.setRequestFocusEnabled(false);
+        jLabelTasksBtn.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
+        jLabelTasksBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/taskIcon.png"))); // NOI18N
+        jLabelTasksBtn.setText("Tarefas");
+        jLabelTasksBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabelTasksBtn.setMaximumSize(new java.awt.Dimension(168, 64));
+        jLabelTasksBtn.setPreferredSize(new java.awt.Dimension(148, 64));
+        jLabelTasksBtn.setRequestFocusEnabled(false);
 
         javax.swing.GroupLayout jPanelTasksLayout = new javax.swing.GroupLayout(jPanelTasks);
         jPanelTasks.setLayout(jPanelTasksLayout);
         jPanelTasksLayout.setHorizontalGroup(
             jPanelTasksLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabelTasksBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanelTasksLayout.setVerticalGroup(
             jPanelTasksLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, Short.MAX_VALUE)
+            .addComponent(jLabelTasksBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 50, Short.MAX_VALUE)
         );
 
         jPanelSchedules.setBackground(new java.awt.Color(0, 0, 0));
         jPanelSchedules.setPreferredSize(new java.awt.Dimension(50, 50));
 
-        jLabel4.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/scheduleIcon.png"))); // NOI18N
-        jLabel4.setText("Cronogramas");
-        jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jLabel4.setMaximumSize(new java.awt.Dimension(168, 64));
-        jLabel4.setMinimumSize(new java.awt.Dimension(138, 64));
-        jLabel4.setPreferredSize(new java.awt.Dimension(148, 64));
-        jLabel4.setRequestFocusEnabled(false);
+        jLabelSchedulesBtn.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
+        jLabelSchedulesBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/scheduleIcon.png"))); // NOI18N
+        jLabelSchedulesBtn.setText("Cronogramas");
+        jLabelSchedulesBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabelSchedulesBtn.setMaximumSize(new java.awt.Dimension(168, 64));
+        jLabelSchedulesBtn.setMinimumSize(new java.awt.Dimension(138, 64));
+        jLabelSchedulesBtn.setPreferredSize(new java.awt.Dimension(148, 64));
+        jLabelSchedulesBtn.setRequestFocusEnabled(false);
 
         javax.swing.GroupLayout jPanelSchedulesLayout = new javax.swing.GroupLayout(jPanelSchedules);
         jPanelSchedules.setLayout(jPanelSchedulesLayout);
         jPanelSchedulesLayout.setHorizontalGroup(
             jPanelSchedulesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabelSchedulesBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanelSchedulesLayout.setVerticalGroup(
             jPanelSchedulesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, Short.MAX_VALUE)
+            .addComponent(jLabelSchedulesBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 50, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanelLeftBarLayout = new javax.swing.GroupLayout(jPanelLeftBar);
@@ -223,8 +219,7 @@ public class MainScreen extends javax.swing.JFrame {
                         .addGap(0, 0, 0)
                         .addComponent(jPanelContent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jPanelTopBar, javax.swing.GroupLayout.DEFAULT_SIZE, 589, Short.MAX_VALUE))
-                .addGap(0, 0, 0)
-                .addComponent(jPanelMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -232,9 +227,6 @@ public class MainScreen extends javax.swing.JFrame {
                 .addComponent(jPanelTopBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(83, 83, 83)
-                        .addComponent(jPanelMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanelLeftBar, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)
                     .addComponent(jPanelContent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
@@ -278,15 +270,14 @@ public class MainScreen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabelHomeBtn;
+    private javax.swing.JLabel jLabelSchedulesBtn;
+    private javax.swing.JLabel jLabelShowHideBtn;
+    private javax.swing.JLabel jLabelTasksBtn;
     private javax.swing.JLabel jLabelUser;
     private javax.swing.JPanel jPanelContent;
     private javax.swing.JPanel jPanelHome;
     private javax.swing.JPanel jPanelLeftBar;
-    private javax.swing.JPanel jPanelMain;
     private javax.swing.JPanel jPanelSchedules;
     private javax.swing.JPanel jPanelShowHide;
     private javax.swing.JPanel jPanelTasks;
