@@ -118,7 +118,7 @@ public class UserController {
             resultSet = statement.executeQuery();
             
             //verifica se existe algum registro no resultSet
-            if(resultSet.isBeforeFirst()){
+            if(resultSet.next()){
                 user = new User();
                 user.setId(resultSet.getInt("id"));
                 user.setName(resultSet.getString("name"));

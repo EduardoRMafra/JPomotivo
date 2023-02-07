@@ -4,6 +4,8 @@
  */
 package view;
 
+import model.User;
+
 /**
  *
  * @author Eduardo
@@ -13,8 +15,10 @@ public class MainScreen extends javax.swing.JFrame {
     /**
      * Creates new form MainScreen
      */
-    public MainScreen() {
+    public MainScreen(User user) {
         initComponents();
+        //atribuindo o nome de usuário ao campo de texto jLabelUser
+        jLabelUser.setText(user.getName());
     }
 
     /**
@@ -268,6 +272,7 @@ public class MainScreen extends javax.swing.JFrame {
         jPanelUser.setBackground(new java.awt.Color(0, 0, 0));
 
         jLabelUser.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
+        jLabelUser.setForeground(new java.awt.Color(255, 255, 255));
         jLabelUser.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabelUser.setText("UserName");
 
@@ -309,6 +314,7 @@ public class MainScreen extends javax.swing.JFrame {
         jPanelShowHide.setPreferredSize(new java.awt.Dimension(50, 50));
 
         jLabelShowHideBtn.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
+        jLabelShowHideBtn.setForeground(new java.awt.Color(255, 255, 255));
         jLabelShowHideBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/hideMenu.png"))); // NOI18N
         jLabelShowHideBtn.setText("Diminuir");
         jLabelShowHideBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -332,6 +338,7 @@ public class MainScreen extends javax.swing.JFrame {
         jPanelQuit.setPreferredSize(new java.awt.Dimension(50, 50));
 
         jLabelQuitBtn.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
+        jLabelQuitBtn.setForeground(new java.awt.Color(255, 255, 255));
         jLabelQuitBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quitIcon.png"))); // NOI18N
         jLabelQuitBtn.setText("Sair");
         jLabelQuitBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -355,6 +362,7 @@ public class MainScreen extends javax.swing.JFrame {
         jPanelTasks.setPreferredSize(new java.awt.Dimension(50, 50));
 
         jLabelTasksBtn.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
+        jLabelTasksBtn.setForeground(new java.awt.Color(255, 255, 255));
         jLabelTasksBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/taskIcon.png"))); // NOI18N
         jLabelTasksBtn.setText("Tarefas");
         jLabelTasksBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -377,6 +385,7 @@ public class MainScreen extends javax.swing.JFrame {
         jPanelSchedules.setPreferredSize(new java.awt.Dimension(50, 50));
 
         jLabelSchedulesBtn.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
+        jLabelSchedulesBtn.setForeground(new java.awt.Color(255, 255, 255));
         jLabelSchedulesBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/scheduleIcon.png"))); // NOI18N
         jLabelSchedulesBtn.setText("Cronogramas");
         jLabelSchedulesBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -457,7 +466,7 @@ public class MainScreen extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainScreen().setVisible(true);
+               // new MainScreen().setVisible(true);
             }
         });
     }

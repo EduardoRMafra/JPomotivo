@@ -4,17 +4,23 @@
  */
 package view;
 
+import controller.UserController;
+import javax.swing.JOptionPane;
+import model.User;
+
 /**
  *
  * @author Eduardo
  */
 public class LoginScreen extends javax.swing.JFrame {
 
+    UserController userController;
     /**
      * Creates new form LoginScreen
      */
     public LoginScreen() {
         initComponents();
+        userController = new UserController();
     }
 
     /**
@@ -33,10 +39,12 @@ public class LoginScreen extends javax.swing.JFrame {
         jPasswordField = new javax.swing.JPasswordField();
         jButtonSignIn = new javax.swing.JButton();
         jButtonLogin = new javax.swing.JButton();
+        jLabelNameW = new javax.swing.JLabel();
+        jLabelPasswordW = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
-        setPreferredSize(new java.awt.Dimension(330, 385));
+        setPreferredSize(new java.awt.Dimension(365, 385));
         setResizable(false);
 
         jPanelHeader.setBackground(new java.awt.Color(0, 0, 0));
@@ -71,11 +79,21 @@ public class LoginScreen extends javax.swing.JFrame {
         jTextFieldName.setForeground(new java.awt.Color(0, 0, 0));
         jTextFieldName.setToolTipText("");
         jTextFieldName.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Nome", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Comic Sans MS", 1, 14), new java.awt.Color(0, 0, 0))); // NOI18N
+        jTextFieldName.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTextFieldNameMouseClicked(evt);
+            }
+        });
 
         jPasswordField.setBackground(new java.awt.Color(255, 255, 255));
         jPasswordField.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
         jPasswordField.setForeground(new java.awt.Color(0, 0, 0));
         jPasswordField.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Senha", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Comic Sans MS", 1, 14), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPasswordField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPasswordFieldMouseClicked(evt);
+            }
+        });
 
         jButtonSignIn.setBackground(new java.awt.Color(153, 153, 153));
         jButtonSignIn.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
@@ -84,6 +102,11 @@ public class LoginScreen extends javax.swing.JFrame {
         jButtonSignIn.setBorder(null);
         jButtonSignIn.setBorderPainted(false);
         jButtonSignIn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButtonSignIn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonSignInMouseClicked(evt);
+            }
+        });
 
         jButtonLogin.setBackground(new java.awt.Color(0, 0, 0));
         jButtonLogin.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
@@ -92,6 +115,19 @@ public class LoginScreen extends javax.swing.JFrame {
         jButtonLogin.setBorder(null);
         jButtonLogin.setBorderPainted(false);
         jButtonLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButtonLogin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonLoginMouseClicked(evt);
+            }
+        });
+
+        jLabelNameW.setFont(new java.awt.Font("Comic Sans MS", 1, 10)); // NOI18N
+        jLabelNameW.setForeground(new java.awt.Color(255, 51, 51));
+        jLabelNameW.setToolTipText("");
+
+        jLabelPasswordW.setFont(new java.awt.Font("Comic Sans MS", 1, 10)); // NOI18N
+        jLabelPasswordW.setForeground(new java.awt.Color(255, 51, 51));
+        jLabelPasswordW.setToolTipText("");
 
         javax.swing.GroupLayout jPanelFormLayout = new javax.swing.GroupLayout(jPanelForm);
         jPanelForm.setLayout(jPanelFormLayout);
@@ -105,7 +141,9 @@ public class LoginScreen extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
                         .addComponent(jButtonSignIn, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPasswordField)
-                    .addComponent(jTextFieldName, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(jTextFieldName, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabelNameW, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelPasswordW, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanelFormLayout.setVerticalGroup(
@@ -113,9 +151,13 @@ public class LoginScreen extends javax.swing.JFrame {
             .addGroup(jPanelFormLayout.createSequentialGroup()
                 .addGap(45, 45, 45)
                 .addComponent(jTextFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(5, 5, 5)
+                .addComponent(jLabelNameW)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelPasswordW)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addGroup(jPanelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonSignIn, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -139,6 +181,66 @@ public class LoginScreen extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    //logando em usuário existente
+    private void jButtonLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonLoginMouseClicked
+        // verifica se existe algum campo vazio e caso exista, apresenta uma mensagem de aviso abaixo do campo
+        if(jTextFieldName.getText().isEmpty() || jTextFieldName.getText().isBlank() || jPasswordField.getText().isEmpty() || jPasswordField.getText().isBlank()){
+            if(jTextFieldName.getText().isEmpty() || jTextFieldName.getText().isBlank()){
+                jLabelNameW.setText("Esse campo não pode estar vazio!");
+            }
+            if(jPasswordField.getText().isEmpty() || jPasswordField.getText().isBlank()){
+                jLabelPasswordW.setText("Esse campo não pode estar vazio!");
+            }
+        }// caso nenhum campo esteja vazio verifica se o usuário existe, se não existir ele é nulo.
+        else{
+            User user = userController.hasUser(jTextFieldName.getText(), jPasswordField.getText());
+            if(user == null){
+                //criar uma caixa de mensagem informando que o usuário não foi encontrado
+                JOptionPane.showMessageDialog(rootPane, "Usuário não encontrado, registre um novo usuário ou tente novamente!");
+            }else{
+                //caso o usuário exista cria uma mainScreen, passando como parametro o usuário e deixa ela visível.
+                MainScreen mainScreen = new MainScreen(user);
+                mainScreen.setVisible(true);
+                
+                //fecha essa tela.
+                dispose();
+            }
+        }
+    }//GEN-LAST:event_jButtonLoginMouseClicked
+    //apaga os avisos de campo vazio ao clicar em algum deles
+    private void jTextFieldNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldNameMouseClicked
+        jLabelNameW.setText("");
+    }//GEN-LAST:event_jTextFieldNameMouseClicked
+
+    private void jPasswordFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPasswordFieldMouseClicked
+        jLabelPasswordW.setText("");
+    }//GEN-LAST:event_jPasswordFieldMouseClicked
+    //cadastrando usuário
+    private void jButtonSignInMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonSignInMouseClicked
+        // verifica se existe algum campo vazio e caso exista, apresenta uma mensagem de aviso abaixo do campo
+        if(jTextFieldName.getText().isEmpty() || jTextFieldName.getText().isBlank() || jPasswordField.getText().isEmpty() || jPasswordField.getText().isBlank()){
+            if(jTextFieldName.getText().isEmpty() || jTextFieldName.getText().isBlank()){
+                jLabelNameW.setText("Esse campo não pode estar vazio!");
+            }
+            if(jPasswordField.getText().isEmpty() || jPasswordField.getText().isBlank()){
+                jLabelPasswordW.setText("Esse campo não pode estar vazio!");
+            }
+        }// caso nenhum campo esteja vazio verifica se o usuário existe, se existir ele avisa o usuário que aquele usuário já está cadastrado.
+        else{
+            if(userController.hasUser(jTextFieldName.getText(), jPasswordField.getText()) != null){
+                JOptionPane.showMessageDialog(rootPane, "Usuário já existente, utilize o botão login para acessá-lo, ou crie um novo!");
+            }//se o usuário ainda não existir cadastra as informações do usuário.
+            else{
+                User user = new User();
+                user.setName(jTextFieldName.getText());
+                user.setPassword(jPasswordField.getText());
+                
+                userController.create(user);
+                JOptionPane.showMessageDialog(rootPane, "Usuário registrado com sucesso!");
+            }
+        }
+    }//GEN-LAST:event_jButtonSignInMouseClicked
 
     /**
      * @param args the command line arguments
@@ -178,6 +280,8 @@ public class LoginScreen extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonLogin;
     private javax.swing.JButton jButtonSignIn;
+    private javax.swing.JLabel jLabelNameW;
+    private javax.swing.JLabel jLabelPasswordW;
     private javax.swing.JLabel jLabelTitle;
     private javax.swing.JPanel jPanelForm;
     private javax.swing.JPanel jPanelHeader;
