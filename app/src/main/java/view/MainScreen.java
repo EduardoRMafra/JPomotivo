@@ -9,11 +9,18 @@ import controller.ScheduleTaskController;
 import controller.TaskController;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.util.List;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import model.Task;
 import model.User;
+import util.ButtonColumnCellRender;
+import util.DeadlineColumnCellRender;
+import util.TaskTableModel;
 
 /**
  *
@@ -29,6 +36,8 @@ public class MainScreen extends javax.swing.JFrame {
     private TaskController taskController;
     private ScheduleController scheduleController;
     private ScheduleTaskController scheduleTaskController;
+    private TaskTableModel taskModel;
+    private User user;
     
     /**
      * Creates new form MainScreen
@@ -36,11 +45,20 @@ public class MainScreen extends javax.swing.JFrame {
     public MainScreen() {
         initComponents();
         initController();
+        
+        decorateTableTask();
     }
     public MainScreen(User user) {
         initComponents();
+        
         //atribuindo o nome de usuário ao campo de texto jLabelUser
-        jLabelUser.setText(user.getName());
+        this.user = user;
+        jLabelUser.setText(this.user.getName());
+        
+        initController();
+        decorateTableTask();
+        
+        initFirstPanel();
     }
 
     /**
@@ -119,10 +137,12 @@ public class MainScreen extends javax.swing.JFrame {
         jScrollPaneTask.setViewportView(jTableTask);
 
         jLabelTasksTitle.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
+        jLabelTasksTitle.setForeground(new java.awt.Color(255, 255, 255));
         jLabelTasksTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelTasksTitle.setText("Tarefas");
 
         jLabelTasksAdd.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
+        jLabelTasksAdd.setForeground(new java.awt.Color(255, 255, 255));
         jLabelTasksAdd.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelTasksAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/addIcon.png"))); // NOI18N
 
@@ -631,6 +651,7 @@ public class MainScreen extends javax.swing.JFrame {
     private void jPanelTasksMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanelTasksMouseClicked
         // deixa o item selecionado
         selectedMenu(jPanelTasks);
+        loadTasks(user.getId());
     }//GEN-LAST:event_jPanelTasksMouseClicked
 
     private void jPanelSchedulesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanelSchedulesMouseClicked
@@ -659,6 +680,15 @@ public class MainScreen extends javax.swing.JFrame {
         taskController = new TaskController();
         scheduleController = new ScheduleController();
         scheduleTaskController = new ScheduleTaskController();
+        taskModel = new TaskTableModel();
+        jTableTask.setModel(taskModel);
+    }
+    
+    public void initFirstPanel(){
+        // deixa o item selecionado
+        selectedMenu(jPanelTasks);
+        //carrega lista de tarefas
+        loadTasks(user.getId());
     }
     /**
      * @param args the command line arguments
@@ -731,4 +761,44 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JTable jTableScheduleTask;
     private javax.swing.JTable jTableTask;
     // End of variables declaration//GEN-END:variables
+
+    public void decorateTableTask(){
+	jTableTask.getTableHeader().setFont (new Font("Comic Sans", Font.BOLD, 14));
+	jTableTask.getTableHeader().setBackground(new Color(18,30,49));
+	jTableTask.getTableHeader().setForeground(new Color(255, 255, 255));
+        
+        jTableTask.getColumnModel().getColumn(2)
+                .setCellRenderer(new DeadlineColumnCellRender());
+        
+        jTableTask.getColumnModel().getColumn(4)
+                .setCellRenderer(new ButtonColumnCellRender("edit"));
+        
+        jTableTask.getColumnModel().getColumn(5)
+                .setCellRenderer(new ButtonColumnCellRender("delete"));
+        
+        
+        jTableTask.setAutoCreateRowSorter(true);//ativa ordenação automática por coluna
+    }
+        public void loadTasks(int idUser){
+	List<Task> tasks = taskController.getAll(idUser); //todas as tarefas do usuário
+        
+        taskModel.setTasks(tasks);
+        
+        showJTableTasks();
+    }
+    public void showJTableTasks(){
+            if(jPanelScheduleTable.isVisible()){
+                jPanelScheduleTable.setVisible(false);
+                jPanelContent.remove(jPanelScheduleTable);
+            }
+            if(jPanelScheduleTaskTable.isVisible()){
+                jPanelScheduleTaskTable.setVisible(false);
+                jPanelContent.remove(jPanelScheduleTaskTable);
+            }
+            jPanelContent.add(jPanelTaskTable);
+            jPanelContent.revalidate();
+            jPanelTaskTable.setSize(jPanelContent.getWidth(), jPanelContent.getHeight());
+            jPanelTaskTable.setVisible(true);
+            
+    }
 }
