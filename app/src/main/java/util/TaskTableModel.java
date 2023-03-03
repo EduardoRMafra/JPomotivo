@@ -56,10 +56,12 @@ public class TaskTableModel extends AbstractTableModel {
             case 1:
                 return tasks.get(rowIndex).getDescription();
             case 2:
-                //alterar o formato para dd//MM/yyyy
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                return dateFormat.format(tasks.get(rowIndex).getDeadline());
-
+                if(tasks.get(rowIndex).getDeadline() != null){
+                    //alterar o formato para dd//MM/yyyy
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                    return dateFormat.format(tasks.get(rowIndex).getDeadline());
+                }
+                return null;
             case 3:
                 return tasks.get(rowIndex).isCompleted();
             case 4:

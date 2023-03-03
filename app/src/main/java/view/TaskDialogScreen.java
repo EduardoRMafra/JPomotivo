@@ -4,6 +4,12 @@
  */
 package view;
 
+import controller.TaskController;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.JOptionPane;
+import model.Task;
+
 /**
  *
  * @author Eduardo
@@ -13,9 +19,13 @@ public class TaskDialogScreen extends javax.swing.JDialog {
     /**
      * Creates new form TaskDialogScreen
      */
+    private TaskController controller;
+    private int userId; //serve para dizer qual projeto a tarefa pertence
+
     public TaskDialogScreen(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        controller = new TaskController();
     }
 
     /**
@@ -35,9 +45,10 @@ public class TaskDialogScreen extends javax.swing.JDialog {
         jTextAreaDescription = new javax.swing.JTextArea();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextAreaNotes = new javax.swing.JTextArea();
-        jTextFieldDeadline = new javax.swing.JTextField();
         jButtonOk = new javax.swing.JButton();
         jButtonCancel = new javax.swing.JButton();
+        jFormattedTextFieldDeadline = new javax.swing.JFormattedTextField();
+        jCheckBoxDeadline = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -45,6 +56,7 @@ public class TaskDialogScreen extends javax.swing.JDialog {
         jPanelHeader.setBackground(new java.awt.Color(0, 0, 0));
 
         jLabelTitle.setFont(new java.awt.Font("Comic Sans MS", 1, 24)); // NOI18N
+        jLabelTitle.setForeground(new java.awt.Color(255, 255, 255));
         jLabelTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelTitle.setText("Adicionar Tarefa");
         jLabelTitle.setPreferredSize(new java.awt.Dimension(198, 64));
@@ -91,23 +103,33 @@ public class TaskDialogScreen extends javax.swing.JDialog {
         jTextAreaNotes.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Notas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Comic Sans MS", 1, 14), new java.awt.Color(0, 0, 0))); // NOI18N
         jScrollPane1.setViewportView(jTextAreaNotes);
 
-        jTextFieldDeadline.setBackground(new java.awt.Color(255, 255, 255));
-        jTextFieldDeadline.setFont(new java.awt.Font("Comic Sans MS", 0, 12)); // NOI18N
-        jTextFieldDeadline.setForeground(new java.awt.Color(0, 0, 0));
-        jTextFieldDeadline.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Prazo", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Comic Sans MS", 1, 14), new java.awt.Color(0, 0, 0))); // NOI18N
-        jTextFieldDeadline.setPreferredSize(new java.awt.Dimension(60, 40));
-
         jButtonOk.setBackground(new java.awt.Color(0, 0, 0));
         jButtonOk.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
         jButtonOk.setForeground(new java.awt.Color(255, 255, 255));
         jButtonOk.setText("Ok");
         jButtonOk.setBorderPainted(false);
+        jButtonOk.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonOkMouseClicked(evt);
+            }
+        });
 
         jButtonCancel.setBackground(new java.awt.Color(153, 153, 153));
         jButtonCancel.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
         jButtonCancel.setForeground(new java.awt.Color(255, 255, 255));
         jButtonCancel.setText("Cancelar");
         jButtonCancel.setBorderPainted(false);
+
+        jFormattedTextFieldDeadline.setEditable(false);
+        jFormattedTextFieldDeadline.setBackground(new java.awt.Color(255, 255, 255));
+        jFormattedTextFieldDeadline.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Prazo", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Comic Sans MS", 1, 14), new java.awt.Color(0, 0, 0))); // NOI18N
+        jFormattedTextFieldDeadline.setForeground(new java.awt.Color(0, 0, 0));
+        jFormattedTextFieldDeadline.setFont(new java.awt.Font("Comic Sans MS", 0, 12)); // NOI18N
+
+        jCheckBoxDeadline.setBackground(new java.awt.Color(255, 255, 255));
+        jCheckBoxDeadline.setFont(new java.awt.Font("Comic Sans MS", 1, 12)); // NOI18N
+        jCheckBoxDeadline.setForeground(new java.awt.Color(0, 0, 0));
+        jCheckBoxDeadline.setText("Possuí prazo");
 
         javax.swing.GroupLayout jPanelContentLayout = new javax.swing.GroupLayout(jPanelContent);
         jPanelContent.setLayout(jPanelContentLayout);
@@ -119,11 +141,14 @@ public class TaskDialogScreen extends javax.swing.JDialog {
                     .addComponent(jTextFieldName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane2)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
-                    .addComponent(jTextFieldDeadline, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanelContentLayout.createSequentialGroup()
                         .addComponent(jButtonOk, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButtonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelContentLayout.createSequentialGroup()
+                        .addComponent(jCheckBoxDeadline)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jFormattedTextFieldDeadline)))
                 .addContainerGap())
         );
         jPanelContentLayout.setVerticalGroup(
@@ -134,9 +159,11 @@ public class TaskDialogScreen extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldDeadline, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanelContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jFormattedTextFieldDeadline)
+                    .addComponent(jCheckBoxDeadline, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
                 .addGap(12, 12, 12)
                 .addGroup(jPanelContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonOk, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -161,6 +188,39 @@ public class TaskDialogScreen extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButtonOkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonOkMouseClicked
+        // TODO add your handling code here:
+        try{
+            if(!jTextFieldName.getText().isEmpty() 
+                    && (!jCheckBoxDeadline.isSelected()|| !jFormattedTextFieldDeadline.getText().isEmpty())){
+                Task task = new Task();
+                task.setIdUser(userId);
+                task.setName(jTextFieldName.getText());
+                task.setDescription(jTextAreaDescription.getText());
+                task.setNotes(jTextAreaNotes.getText());
+                task.setCompleted(false);
+                Date deadline = null;
+                if(jCheckBoxDeadline.isSelected()){
+                    //a data do deadline é uma string temos que converter para tipo date
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                    deadline = dateFormat.parse(jFormattedTextFieldDeadline.getText());
+                }
+                task.setDeadline(deadline);
+                
+                controller.save(task);
+
+                JOptionPane.showMessageDialog(rootPane, "Tarefa salva com sucesso");
+                this.dispose();
+            }else{
+                JOptionPane.showMessageDialog(rootPane, "A tarefa não foi salva"
+                        + "pois existem campos obrigatórios a serem preenchidos");
+            }
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(rootPane, e.getMessage());
+        }
+    }//GEN-LAST:event_jButtonOkMouseClicked
 
     /**
      * @param args the command line arguments
@@ -207,6 +267,8 @@ public class TaskDialogScreen extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonOk;
+    private javax.swing.JCheckBox jCheckBoxDeadline;
+    private javax.swing.JFormattedTextField jFormattedTextFieldDeadline;
     private javax.swing.JLabel jLabelTitle;
     private javax.swing.JPanel jPanelContent;
     private javax.swing.JPanel jPanelHeader;
@@ -214,7 +276,10 @@ public class TaskDialogScreen extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextAreaDescription;
     private javax.swing.JTextArea jTextAreaNotes;
-    private javax.swing.JTextField jTextFieldDeadline;
     private javax.swing.JTextField jTextFieldName;
     // End of variables declaration//GEN-END:variables
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 }

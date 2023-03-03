@@ -10,6 +10,8 @@ import controller.TaskController;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -145,6 +147,11 @@ public class MainScreen extends javax.swing.JFrame {
         jLabelTasksAdd.setForeground(new java.awt.Color(255, 255, 255));
         jLabelTasksAdd.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelTasksAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/addIcon.png"))); // NOI18N
+        jLabelTasksAdd.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabelTasksAddMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelTaskTableLayout = new javax.swing.GroupLayout(jPanelTaskTable);
         jPanelTaskTable.setLayout(jPanelTaskTableLayout);
@@ -658,6 +665,21 @@ public class MainScreen extends javax.swing.JFrame {
         // deixar o item selecionado
         selectedMenu(jPanelSchedules);
     }//GEN-LAST:event_jPanelSchedulesMouseClicked
+
+    private void jLabelTasksAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelTasksAddMouseClicked
+        // TODO add your handling code here:
+        TaskDialogScreen taskDialogScreen = new TaskDialogScreen(this, rootPaneCheckingEnabled);
+        
+        taskDialogScreen.setUserId(user.getId());
+        
+        taskDialogScreen.setVisible(true);
+        
+        taskDialogScreen.addWindowListener(new WindowAdapter() {
+           public void windowClosed(WindowEvent e){
+               loadTasks(user.getId());
+           } 
+        });
+    }//GEN-LAST:event_jLabelTasksAddMouseClicked
     private void mouseOver(JPanel jPanel){
         if(jPanel.getBackground() == selectedColor){
             return;
@@ -763,21 +785,25 @@ public class MainScreen extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     public void decorateTableTask(){
-	jTableTask.getTableHeader().setFont (new Font("Comic Sans", Font.BOLD, 14));
-	jTableTask.getTableHeader().setBackground(new Color(18,30,49));
+	jTableTask.getTableHeader().setBackground(new Color(0,0,0));
 	jTableTask.getTableHeader().setForeground(new Color(255, 255, 255));
+        
+	jTableTask.setFont (new Font("Comic Sans", Font.BOLD, 14));
+        jTableTask.setBackground(new Color(18,30,49));
+        jTableTask.setForeground(new Color(255,255,255));
+        jTableTask.setRowHeight(40);
         
         jTableTask.getColumnModel().getColumn(2)
                 .setCellRenderer(new DeadlineColumnCellRender());
         
         jTableTask.getColumnModel().getColumn(4)
-                .setCellRenderer(new ButtonColumnCellRender("edit"));
+                .setCellRenderer(new ButtonColumnCellRender("updateIcon"));
         
         jTableTask.getColumnModel().getColumn(5)
-                .setCellRenderer(new ButtonColumnCellRender("delete"));
+                .setCellRenderer(new ButtonColumnCellRender("removeIcon"));
         
         
-        jTableTask.setAutoCreateRowSorter(true);//ativa ordenação automática por coluna
+        //jTableTask.setAutoCreateRowSorter(true);//ativa ordenação automática por coluna
     }
         public void loadTasks(int idUser){
 	List<Task> tasks = taskController.getAll(idUser); //todas as tarefas do usuário

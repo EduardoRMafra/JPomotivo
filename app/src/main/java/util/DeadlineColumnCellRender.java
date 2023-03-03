@@ -34,10 +34,12 @@ public class DeadlineColumnCellRender extends DefaultTableCellRenderer {
         Task task = taskModel.getTasks().get(row);
         
         //verifica se o deadline está depois da data atual
-        if(task.getDeadline().after(new Date())){
-            label.setBackground(Color.GREEN);
-        }else{
-            label.setBackground(Color.RED);
+        if(task.getDeadline() != null){
+            if(task.getDeadline().after(new Date())){
+                label.setBackground(Color.GREEN);
+            }else{
+                label.setBackground(Color.RED);
+            } 
         }
         return label;
     }

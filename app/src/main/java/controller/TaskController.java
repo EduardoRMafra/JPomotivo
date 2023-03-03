@@ -35,7 +35,11 @@ public class TaskController {
             statement.setString(3, task.getDescription());
             statement.setBoolean(4, task.isCompleted());
             statement.setString(5, task.getNotes());
-            statement.setDate(6, new Date(task.getDeadline().getTime()));
+            if(task.getDeadline() != null){
+                statement.setDate(6, new Date(task.getDeadline().getTime()));              
+            }else{
+                statement.setDate(6, null);      
+            }
             statement.setDate(7, new Date(task.getCreatedAt().getTime()));
             statement.setDate(8, new Date(task.getUpdatedAt().getTime()));
             
@@ -138,7 +142,7 @@ public class TaskController {
                 task.setName(resultSet.getString("name"));
                 task.setDescription(resultSet.getString("description"));
                 task.setCompleted(resultSet.getBoolean("completed"));
-                task.setNotes(resultSet.getString("note"));
+                task.setNotes(resultSet.getString("notes"));
                 task.setDeadline(resultSet.getDate("deadline"));
                 task.setCreatedAt(resultSet.getDate("createdAt"));
                 task.setUpdatedAt(resultSet.getDate("updatedAt"));
