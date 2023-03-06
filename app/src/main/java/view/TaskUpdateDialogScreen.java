@@ -14,18 +14,21 @@ import model.Task;
  *
  * @author Eduardo
  */
-public class TaskDialogScreen extends javax.swing.JDialog {
+public class TaskUpdateDialogScreen extends javax.swing.JDialog {
 
     /**
      * Creates new form TaskDialogScreen
      */
     private TaskController controller;
-    private int userId; //serve para dizer qual usuário a tarefa pertence
+    private Task taskUp; //tarefa que precisa ser atualizada
 
-    public TaskDialogScreen(java.awt.Frame parent, boolean modal) {
+    public TaskUpdateDialogScreen(java.awt.Frame parent, boolean modal, Task taskUp) {
         super(parent, modal);
         initComponents();
         controller = new TaskController();
+        setTask(taskUp);
+        
+        initTaskInfo();
     }
 
     /**
@@ -58,7 +61,7 @@ public class TaskDialogScreen extends javax.swing.JDialog {
         jLabelTitle.setFont(new java.awt.Font("Comic Sans MS", 1, 24)); // NOI18N
         jLabelTitle.setForeground(new java.awt.Color(255, 255, 255));
         jLabelTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelTitle.setText("Adicionar Tarefa");
+        jLabelTitle.setText("Atualizar Tarefa");
         jLabelTitle.setPreferredSize(new java.awt.Dimension(198, 64));
 
         javax.swing.GroupLayout jPanelHeaderLayout = new javax.swing.GroupLayout(jPanelHeader);
@@ -195,18 +198,21 @@ public class TaskDialogScreen extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonOkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonOkMouseClicked
-        // tenta salvar uma tarefa
+        // tenta atualizar uma tarefa
         try{
             //verifica se o nome da tarefa não está vazio, se possuí prazo e se possuir, ele está preenchido
             if(!jTextFieldName.getText().isEmpty() 
                     && (!jCheckBoxDeadline.isSelected()|| !jFormattedTextFieldDeadline.getText().isEmpty())){
                 Task task = new Task();
-                task.setIdUser(userId);
+                task.setId(taskUp.getId());
+                task.setIdUser(taskUp.getIdUser());
                 task.setName(jTextFieldName.getText());
                 task.setDescription(jTextAreaDescription.getText());
                 task.setNotes(jTextAreaNotes.getText());
                 task.setCompleted(false);
                 Date deadline = null;
+                //manter a data de criação da tarefa
+                task.setUpdatedAt(taskUp.getCreatedAt());
                 //se possuí um prazo
                 if(jCheckBoxDeadline.isSelected()){
                     //a data do deadline é uma string temos que converter para tipo date
@@ -215,14 +221,14 @@ public class TaskDialogScreen extends javax.swing.JDialog {
                 }
                 //atribui a task o valor do prazo, seja ele null ou não.
                 task.setDeadline(deadline);
-                
-                //salva a tarefa
-                controller.save(task);
 
-                JOptionPane.showMessageDialog(rootPane, "Tarefa salva com sucesso");
+                //atualiza a tarefa
+                controller.update(task);
+
+                JOptionPane.showMessageDialog(rootPane, "Tarefa atualizada com sucesso");
                 this.dispose();
             }else{
-                JOptionPane.showMessageDialog(rootPane, "A tarefa não foi salva"
+                JOptionPane.showMessageDialog(rootPane, "A tarefa não foi atualizada"
                         + "pois existem campos obrigatórios a serem preenchidos");
             }
         }
@@ -232,51 +238,9 @@ public class TaskDialogScreen extends javax.swing.JDialog {
     }//GEN-LAST:event_jButtonOkMouseClicked
 
     private void jButtonCancelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonCancelMouseClicked
-        // fecha a janela de registro de tarefas
+        // fecha a janela de atualização de tarefas
         this.dispose();
     }//GEN-LAST:event_jButtonCancelMouseClicked
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TaskDialogScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TaskDialogScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TaskDialogScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TaskDialogScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                TaskDialogScreen dialog = new TaskDialogScreen(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancel;
@@ -293,7 +257,18 @@ public class TaskDialogScreen extends javax.swing.JDialog {
     private javax.swing.JTextField jTextFieldName;
     // End of variables declaration//GEN-END:variables
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setTask(Task taskUp) {
+        this.taskUp = taskUp;
+    }
+    
+    public void initTaskInfo(){
+        jTextFieldName.setText(taskUp.getName());
+        jTextAreaDescription.setText(taskUp.getDescription());
+        if(taskUp.getDeadline() != null){
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            jFormattedTextFieldDeadline.setText(dateFormat.format(taskUp.getDeadline()));
+            jCheckBoxDeadline.setSelected(true);
+        }
+        jTextAreaNotes.setText(taskUp.getNotes());
     }
 }

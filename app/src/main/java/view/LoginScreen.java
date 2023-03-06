@@ -180,6 +180,7 @@ public class LoginScreen extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     //logando em usuário existente

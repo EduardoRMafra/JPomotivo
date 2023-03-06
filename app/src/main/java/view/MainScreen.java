@@ -136,6 +136,11 @@ public class MainScreen extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTableTask.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableTaskMouseClicked(evt);
+            }
+        });
         jScrollPaneTask.setViewportView(jTableTask);
 
         jLabelTasksTitle.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
@@ -587,6 +592,7 @@ public class MainScreen extends javax.swing.JFrame {
         getContentPane().add(jPanelContent, java.awt.BorderLayout.CENTER);
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jPanelQuitMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanelQuitMouseEntered
@@ -680,18 +686,53 @@ public class MainScreen extends javax.swing.JFrame {
            } 
         });
     }//GEN-LAST:event_jLabelTasksAddMouseClicked
+
+    private void jTableTaskMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableTaskMouseClicked
+        // pegando a tarefa clicada na tabela atravez da posição do evento de clique do mouse
+        // pegar a tabela atravez da posição do evento que aconteceu na tela
+        int rowIndex = jTableTask.rowAtPoint(evt.getPoint());
+        int columnIndex = jTableTask.columnAtPoint(evt.getPoint());
+        
+        Task task = taskModel.getTasks().get(rowIndex);
+        switch (columnIndex) {
+            case 3:
+                taskController.update(task);
+                break;
+            case 4:
+                //abre dialog screen de atualização de tarefas
+                TaskUpdateDialogScreen taskUpdateDialogScreen = new TaskUpdateDialogScreen(this, rootPaneCheckingEnabled, task);
+
+                taskUpdateDialogScreen.setVisible(true);
+
+                taskUpdateDialogScreen.addWindowListener(new WindowAdapter() {
+                   public void windowClosed(WindowEvent e){
+                       loadTasks(user.getId());
+                   } 
+                });
+                break;            
+            case 5:
+                taskController.removeById(task.getId());
+                taskModel.getTasks().remove(task);
+                
+                loadTasks(user.getId());
+                break;            
+        }
+    }//GEN-LAST:event_jTableTaskMouseClicked
+    //muda o fundo do item que o mouse estiver em cima
     private void mouseOver(JPanel jPanel){
         if(jPanel.getBackground() == selectedColor){
             return;
         }
         jPanel.setBackground(overColor);
     }
+    //volta a cor ao normal ao tirar o mouse de cima
     private void mouseExit(JPanel jPanel){
         if(jPanel.getBackground() == selectedColor){
             return;
         }
         jPanel.setBackground(defaultColor);
     }
+    //muda o fundo do item de menu selecionado
     private void selectedMenu(JPanel selected){
         jPanelSchedules.setBackground(defaultColor);
         jPanelTasks.setBackground(defaultColor);
@@ -796,6 +837,7 @@ public class MainScreen extends javax.swing.JFrame {
         jTableTask.getColumnModel().getColumn(2)
                 .setCellRenderer(new DeadlineColumnCellRender());
         
+        //adicionando os icones de atualizar e remover
         jTableTask.getColumnModel().getColumn(4)
                 .setCellRenderer(new ButtonColumnCellRender("updateIcon"));
         
@@ -812,19 +854,21 @@ public class MainScreen extends javax.swing.JFrame {
         
         showJTableTasks();
     }
+    
+    //esconde qualquer outro jPanel aberto dentro de jPanelContent e abre o jPanelTableTask
     public void showJTableTasks(){
-            if(jPanelScheduleTable.isVisible()){
-                jPanelScheduleTable.setVisible(false);
-                jPanelContent.remove(jPanelScheduleTable);
-            }
-            if(jPanelScheduleTaskTable.isVisible()){
-                jPanelScheduleTaskTable.setVisible(false);
-                jPanelContent.remove(jPanelScheduleTaskTable);
-            }
-            jPanelContent.add(jPanelTaskTable);
-            jPanelContent.revalidate();
-            jPanelTaskTable.setSize(jPanelContent.getWidth(), jPanelContent.getHeight());
-            jPanelTaskTable.setVisible(true);
+        if(jPanelScheduleTable.isVisible()){
+            jPanelScheduleTable.setVisible(false);
+            jPanelContent.remove(jPanelScheduleTable);
+        }
+        if(jPanelScheduleTaskTable.isVisible()){
+            jPanelScheduleTaskTable.setVisible(false);
+            jPanelContent.remove(jPanelScheduleTaskTable);
+        }
+        jPanelContent.add(jPanelTaskTable);
+        jPanelContent.revalidate();
+        jPanelTaskTable.setSize(jPanelContent.getWidth(), jPanelContent.getHeight());
+        jPanelTaskTable.setVisible(true);
             
     }
 }

@@ -35,6 +35,7 @@ public class TaskController {
             statement.setString(3, task.getDescription());
             statement.setBoolean(4, task.isCompleted());
             statement.setString(5, task.getNotes());
+            //verifica se existe prazo
             if(task.getDeadline() != null){
                 statement.setDate(6, new Date(task.getDeadline().getTime()));              
             }else{
@@ -72,7 +73,12 @@ public class TaskController {
             statement.setString(3, task.getDescription());
             statement.setBoolean(4, task.isCompleted());
             statement.setString(5, task.getNotes());
-            statement.setDate(6, new Date(task.getDeadline().getTime()));
+            //verifica se existe prazo
+            if(task.getDeadline() != null){
+                statement.setDate(6, new Date(task.getDeadline().getTime()));              
+            }else{
+                statement.setDate(6, null);      
+            }
             statement.setDate(7, new Date(task.getCreatedAt().getTime()));
             statement.setDate(8, new Date(task.getUpdatedAt().getTime()));
             statement.setInt(9, task.getId());
