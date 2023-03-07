@@ -4,6 +4,11 @@
  */
 package view;
 
+import controller.ScheduleController;
+import java.awt.event.ItemEvent;
+import javax.swing.JOptionPane;
+import model.Schedule;
+
 /**
  *
  * @author Eduardo
@@ -13,9 +18,14 @@ public class ScheduleDialogScreen extends javax.swing.JDialog {
     /**
      * Creates new form ScheduleDialogScreen
      */
+    private ScheduleController scheduleController;
+    private int userId; //serve para dizer qual usuário o cronograma pertence
+    
     public ScheduleDialogScreen(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        scheduleController = new ScheduleController();
+        verCheckBox();
     }
 
     /**
@@ -50,6 +60,7 @@ public class ScheduleDialogScreen extends javax.swing.JDialog {
         jPanelHeader.setPreferredSize(new java.awt.Dimension(400, 64));
 
         jLabelTitle.setFont(new java.awt.Font("Comic Sans MS", 1, 24)); // NOI18N
+        jLabelTitle.setForeground(new java.awt.Color(255, 255, 255));
         jLabelTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelTitle.setText("Criar cronograma");
 
@@ -102,6 +113,11 @@ public class ScheduleDialogScreen extends javax.swing.JDialog {
         jTextFieldTimeWorking.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextFieldTimeWorking.setText("25");
         jTextFieldTimeWorking.setEnabled(false);
+        jTextFieldTimeWorking.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldTimeWorkingKeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelTimeWorkingLayout = new javax.swing.GroupLayout(jPanelTimeWorking);
         jPanelTimeWorking.setLayout(jPanelTimeWorkingLayout);
@@ -142,6 +158,11 @@ public class ScheduleDialogScreen extends javax.swing.JDialog {
         jTextFieldShortBreak.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Pequeno", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Comic Sans MS", 1, 14), new java.awt.Color(0, 0, 0))); // NOI18N
         jTextFieldShortBreak.setEnabled(false);
         jTextFieldShortBreak.setPreferredSize(new java.awt.Dimension(20, 46));
+        jTextFieldShortBreak.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldShortBreakKeyTyped(evt);
+            }
+        });
 
         jTextFieldBigBreak.setBackground(new java.awt.Color(255, 255, 255));
         jTextFieldBigBreak.setFont(new java.awt.Font("Comic Sans MS", 0, 12)); // NOI18N
@@ -151,6 +172,11 @@ public class ScheduleDialogScreen extends javax.swing.JDialog {
         jTextFieldBigBreak.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Grande", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Comic Sans MS", 1, 14), new java.awt.Color(0, 0, 0))); // NOI18N
         jTextFieldBigBreak.setEnabled(false);
         jTextFieldBigBreak.setPreferredSize(new java.awt.Dimension(20, 46));
+        jTextFieldBigBreak.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldBigBreakKeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelTimeBreakLayout = new javax.swing.GroupLayout(jPanelTimeBreak);
         jPanelTimeBreak.setLayout(jPanelTimeBreakLayout);
@@ -182,12 +208,22 @@ public class ScheduleDialogScreen extends javax.swing.JDialog {
         jButtonOk.setForeground(new java.awt.Color(255, 255, 255));
         jButtonOk.setText("Ok");
         jButtonOk.setBorderPainted(false);
+        jButtonOk.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonOkMouseClicked(evt);
+            }
+        });
 
         jButtonCancel.setBackground(new java.awt.Color(153, 153, 153));
         jButtonCancel.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
         jButtonCancel.setForeground(new java.awt.Color(255, 255, 255));
         jButtonCancel.setText("Cancelar");
         jButtonCancel.setBorderPainted(false);
+        jButtonCancel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonCancelMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelContentLayout = new javax.swing.GroupLayout(jPanelContent);
         jPanelContent.setLayout(jPanelContentLayout);
@@ -245,6 +281,61 @@ public class ScheduleDialogScreen extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButtonCancelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonCancelMouseClicked
+        // fecha a janela de registro de cronogramas
+        this.dispose();
+    }//GEN-LAST:event_jButtonCancelMouseClicked
+
+    private void jButtonOkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonOkMouseClicked
+        // tenta salvar um cronograma
+        try{
+            //verifica se o nome do cronograma não está vazio
+            if(!jTextFieldName.getText().isBlank()&& !jTextFieldTimeWorking.getText().isBlank() 
+                    && !jTextFieldShortBreak.getText().isBlank() 
+                    && !jTextFieldBigBreak.getText().isBlank()){
+                Schedule schedule = new Schedule();
+                schedule.setIdUser(userId);
+                schedule.setName(jTextFieldName.getText());
+                schedule.setDescription(jTextAreaDescription.getText());
+                
+                //pega o valor dos intervalos
+                schedule.setTimeWorking(Integer.parseInt(jTextFieldTimeWorking.getText()));
+                schedule.setShortBreak(Integer.parseInt(jTextFieldShortBreak.getText()));
+                schedule.setBigBreak(Integer.parseInt(jTextFieldBigBreak.getText()));
+                //salva a tarefa
+                scheduleController.save(schedule);
+
+                JOptionPane.showMessageDialog(rootPane, "Cronograma salvo com sucesso");
+                this.dispose();
+            }else{
+                JOptionPane.showMessageDialog(rootPane, "O cronograma não foi salvo, "
+                        + "pois existem campos obrigatórios a serem preenchidos");
+            }
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(rootPane, e.getMessage());
+        }
+    }//GEN-LAST:event_jButtonOkMouseClicked
+
+    private void jTextFieldTimeWorkingKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldTimeWorkingKeyTyped
+        onlyNumbers(evt);
+    }//GEN-LAST:event_jTextFieldTimeWorkingKeyTyped
+
+    private void jTextFieldShortBreakKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldShortBreakKeyTyped
+        onlyNumbers(evt);
+    }//GEN-LAST:event_jTextFieldShortBreakKeyTyped
+
+    private void jTextFieldBigBreakKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldBigBreakKeyTyped
+        onlyNumbers(evt);
+    }//GEN-LAST:event_jTextFieldBigBreakKeyTyped
+    //Apenas aceita números
+    private void onlyNumbers(java.awt.event.KeyEvent evt){
+        char c = evt.getKeyChar();
+        
+        if(!Character.isDigit(c)){
+            evt.consume();
+        }        
+    }
     /**
      * @param args the command line arguments
      */
@@ -304,4 +395,32 @@ public class ScheduleDialogScreen extends javax.swing.JDialog {
     private javax.swing.JTextField jTextFieldShortBreak;
     private javax.swing.JTextField jTextFieldTimeWorking;
     // End of variables declaration//GEN-END:variables
+    
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+    
+    public void verCheckBox(){
+        //tempo de trabalho
+        jCheckBoxTimeWorking.addItemListener((ItemEvent e) -> {
+            if(e.getStateChange() == ItemEvent.SELECTED) {//selecionado
+                jTextFieldTimeWorking.setEnabled(false);
+                jTextFieldTimeWorking.setText("25");
+            } else {//não selecionado
+                jTextFieldTimeWorking.setEnabled(true);
+            }
+        });
+        //tempo de descanço
+        jCheckBoxBreak.addItemListener((ItemEvent e) -> {
+            if(e.getStateChange() == ItemEvent.SELECTED) {//selecionado
+                jTextFieldShortBreak.setEnabled(false);
+                jTextFieldBigBreak.setEnabled(false);
+                jTextFieldShortBreak.setText("5");
+                jTextFieldBigBreak.setText("25");
+            } else {//não selecionado
+                jTextFieldShortBreak.setEnabled(true);
+                jTextFieldBigBreak.setEnabled(true);
+            }
+        });
+    }
 }

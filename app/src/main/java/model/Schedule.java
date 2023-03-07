@@ -19,6 +19,8 @@ public class Schedule {
     private int bigBreak;
 
     public Schedule() {
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
     }
 
     

@@ -67,6 +67,9 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Comic Sans MS" size="24" style="1"/>
             </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" value="Criar cronograma"/>
           </Properties>
@@ -270,6 +273,9 @@
                 <Property name="text" type="java.lang.String" value="25"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextFieldTimeWorkingKeyTyped"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -365,6 +371,9 @@
                   <Dimension value="[20, 46]"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextFieldShortBreakKeyTyped"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextFieldBigBreak">
               <Properties>
@@ -392,6 +401,9 @@
                   <Dimension value="[20, 46]"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextFieldBigBreakKeyTyped"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -409,6 +421,9 @@
             <Property name="text" type="java.lang.String" value="Ok"/>
             <Property name="borderPainted" type="boolean" value="false"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButtonOkMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButtonCancel">
           <Properties>
@@ -424,6 +439,9 @@
             <Property name="text" type="java.lang.String" value="Cancelar"/>
             <Property name="borderPainted" type="boolean" value="false"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButtonCancelMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

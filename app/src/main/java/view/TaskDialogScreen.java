@@ -198,8 +198,8 @@ public class TaskDialogScreen extends javax.swing.JDialog {
         // tenta salvar uma tarefa
         try{
             //verifica se o nome da tarefa não está vazio, se possuí prazo e se possuir, ele está preenchido
-            if(!jTextFieldName.getText().isEmpty() 
-                    && (!jCheckBoxDeadline.isSelected()|| !jFormattedTextFieldDeadline.getText().isEmpty())){
+            if(!jTextFieldName.getText().isBlank()
+                    && (!jCheckBoxDeadline.isSelected()|| !jFormattedTextFieldDeadline.getText().isBlank())){
                 Task task = new Task();
                 task.setIdUser(userId);
                 task.setName(jTextFieldName.getText());
@@ -222,7 +222,7 @@ public class TaskDialogScreen extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(rootPane, "Tarefa salva com sucesso");
                 this.dispose();
             }else{
-                JOptionPane.showMessageDialog(rootPane, "A tarefa não foi salva"
+                JOptionPane.showMessageDialog(rootPane, "A tarefa não foi salva, "
                         + "pois existem campos obrigatórios a serem preenchidos");
             }
         }
