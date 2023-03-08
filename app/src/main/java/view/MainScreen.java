@@ -272,6 +272,11 @@ public class MainScreen extends javax.swing.JFrame {
         });
         jTableSchedule.setShowGrid(true);
         jTableSchedule.setShowVerticalLines(false);
+        jTableSchedule.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableScheduleMouseClicked(evt);
+            }
+        });
         jScrollPaneSchedule.setViewportView(jTableSchedule);
 
         jLabeSchedulesTitle.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
@@ -744,6 +749,39 @@ public class MainScreen extends javax.swing.JFrame {
            } 
         });
     }//GEN-LAST:event_jLabelSchedulesAddMouseClicked
+
+    private void jTableScheduleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableScheduleMouseClicked
+        // pegando o cronograma clicado na tabela atravez da posição do evento de clique do mouse
+        // pegar o cronograma atravez da posição do evento que aconteceu na tela
+        int rowIndex = jTableSchedule.rowAtPoint(evt.getPoint());
+        int columnIndex = jTableSchedule.columnAtPoint(evt.getPoint());
+        
+        Schedule schedule = scheduleModel.getSchedules().get(rowIndex);
+        switch (columnIndex) {
+            case 2:
+                //abre dialog screen de atualização de cronogramas
+                ScheduleUpdateDialogScreen scheduleUpdateDialogScreen = new ScheduleUpdateDialogScreen(this, rootPaneCheckingEnabled, schedule);
+
+                scheduleUpdateDialogScreen.setVisible(true);
+
+                scheduleUpdateDialogScreen.addWindowListener(new WindowAdapter() {
+                   public void windowClosed(WindowEvent e){
+                       loadSchedules(user.getId());
+                   } 
+                });
+                break;            
+            case 3:
+                scheduleController.removeById(schedule.getId());
+                scheduleModel.getSchedules().remove(schedule);
+                
+                loadSchedules(user.getId());
+                break;
+            default:
+                selectedMenu(jPanelScheduleTaskTable);
+                loadScheduleTask(user.getId(), schedule.getId());
+                break;
+        }
+    }//GEN-LAST:event_jTableScheduleMouseClicked
     //muda o fundo do item que o mouse estiver em cima
     private void mouseOver(JPanel jPanel){
         if(jPanel.getBackground() == selectedColor){
@@ -762,7 +800,9 @@ public class MainScreen extends javax.swing.JFrame {
     private void selectedMenu(JPanel selected){
         jPanelSchedules.setBackground(defaultColor);
         jPanelTasks.setBackground(defaultColor);
-        selected.setBackground(selectedColor);
+        if(selected != jPanelScheduleTaskTable){
+            selected.setBackground(selectedColor);
+        }
     }
     
     public void initController(){
@@ -890,6 +930,25 @@ public class MainScreen extends javax.swing.JFrame {
         
         jTableSchedule.getColumnModel().getColumn(3)
                 .setCellRenderer(new ButtonColumnCellRender("removeIcon"));
+        
+        //tabela scheduleTasks
+	jTableScheduleTask.getTableHeader().setBackground(new Color(0,0,0));
+	jTableScheduleTask.getTableHeader().setForeground(new Color(255, 255, 255));
+        
+	jTableScheduleTask.setFont (new Font("Comic Sans", Font.BOLD, 14));
+        jTableScheduleTask.setBackground(new Color(18,30,49));
+        jTableScheduleTask.setForeground(new Color(255,255,255));
+        jTableScheduleTask.setRowHeight(40);
+        
+        jTableScheduleTask.getColumnModel().getColumn(2)
+                .setCellRenderer(new DeadlineColumnCellRender());
+        
+        //adicionando os icones de atualizar e remover
+        jTableScheduleTask.getColumnModel().getColumn(4)
+                .setCellRenderer(new ButtonColumnCellRender("updateIcon"));
+        
+        jTableScheduleTask.getColumnModel().getColumn(5)
+                .setCellRenderer(new ButtonColumnCellRender("removeIcon"));
         //jTableTask.setAutoCreateRowSorter(true);//ativa ordenação automática por coluna
     }
     public void loadTasks(int idUser){
@@ -903,9 +962,12 @@ public class MainScreen extends javax.swing.JFrame {
         List<Schedule> schedules = scheduleController.getAll(idUser);
         
         scheduleModel.setSchedules(schedules);
+        
         showJMenuTable(2);
     }
-    
+    public void loadScheduleTask(int idUser, int idSchedule){
+        
+    }
     //esconde qualquer outro jPanel aberto dentro de jPanelContent e abre o 1 - jPanelTableTask, 2 - jPanelTableSchedules, 3 - jPanelTableScheduleTask
     public void showJMenuTable(int item){
         if(jPanelScheduleTable.isVisible()){

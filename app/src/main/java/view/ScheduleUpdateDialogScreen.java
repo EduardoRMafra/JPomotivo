@@ -13,19 +13,23 @@ import model.Schedule;
  *
  * @author Eduardo
  */
-public class ScheduleDialogScreen extends javax.swing.JDialog {
+public class ScheduleUpdateDialogScreen extends javax.swing.JDialog {
 
     /**
      * Creates new form ScheduleDialogScreen
      */
     private ScheduleController scheduleController;
-    private int userId; //serve para dizer qual usuário o cronograma pertence
+    private Schedule schedule;
     
-    public ScheduleDialogScreen(java.awt.Frame parent, boolean modal) {
+    public ScheduleUpdateDialogScreen(java.awt.Frame parent, boolean modal, Schedule schedule) {
         super(parent, modal);
         initComponents();
         scheduleController = new ScheduleController();
+        setSchedule(schedule);
+        
+        initScheduleInfo();
         verCheckBox();
+        
     }
 
     /**
@@ -62,7 +66,7 @@ public class ScheduleDialogScreen extends javax.swing.JDialog {
         jLabelTitle.setFont(new java.awt.Font("Comic Sans MS", 1, 24)); // NOI18N
         jLabelTitle.setForeground(new java.awt.Color(255, 255, 255));
         jLabelTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelTitle.setText("Criar cronograma");
+        jLabelTitle.setText("Atualizar cronograma");
 
         javax.swing.GroupLayout jPanelHeaderLayout = new javax.swing.GroupLayout(jPanelHeader);
         jPanelHeader.setLayout(jPanelHeaderLayout);
@@ -282,33 +286,35 @@ public class ScheduleDialogScreen extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonCancelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonCancelMouseClicked
-        // fecha a janela de registro de cronogramas
+        // fecha a janela de atualização de cronogramas
         this.dispose();
     }//GEN-LAST:event_jButtonCancelMouseClicked
 
     private void jButtonOkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonOkMouseClicked
-        // tenta salvar um cronograma
+        // tenta atualizar um cronograma
         try{
             //verifica se o nome do cronograma não está vazio
             if(!jTextFieldName.getText().isBlank()&& !jTextFieldTimeWorking.getText().isBlank() 
                     && !jTextFieldShortBreak.getText().isBlank() 
                     && !jTextFieldBigBreak.getText().isBlank()){
-                Schedule schedule = new Schedule();
-                schedule.setIdUser(userId);
-                schedule.setName(jTextFieldName.getText());
-                schedule.setDescription(jTextAreaDescription.getText());
+                Schedule s = new Schedule();
+                s.setId(schedule.getId());
+                s.setIdUser(schedule.getIdUser());
+                s.setName(jTextFieldName.getText());
+                s.setDescription(jTextAreaDescription.getText());
+                s.setUpdatedAt(schedule.getUpdatedAt());
                 
                 //pega o valor dos intervalos
-                schedule.setTimeWorking(Integer.parseInt(jTextFieldTimeWorking.getText()));
-                schedule.setShortBreak(Integer.parseInt(jTextFieldShortBreak.getText()));
-                schedule.setBigBreak(Integer.parseInt(jTextFieldBigBreak.getText()));
-                //salva a tarefa
-                scheduleController.save(schedule);
+                s.setTimeWorking(Integer.parseInt(jTextFieldTimeWorking.getText()));
+                s.setShortBreak(Integer.parseInt(jTextFieldShortBreak.getText()));
+                s.setBigBreak(Integer.parseInt(jTextFieldBigBreak.getText()));
+                //atualizar o cronograma
+                scheduleController.update(s);
 
-                JOptionPane.showMessageDialog(rootPane, "Cronograma salvo com sucesso");
+                JOptionPane.showMessageDialog(rootPane, "Cronograma atualizado com sucesso");
                 this.dispose();
             }else{
-                JOptionPane.showMessageDialog(rootPane, "O cronograma não foi salvo, "
+                JOptionPane.showMessageDialog(rootPane, "O cronograma não foi atualizado, "
                         + "pois existem campos obrigatórios a serem preenchidos");
             }
         }
@@ -336,47 +342,6 @@ public class ScheduleDialogScreen extends javax.swing.JDialog {
             evt.consume();
         }        
     }
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ScheduleDialogScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ScheduleDialogScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ScheduleDialogScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ScheduleDialogScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                ScheduleDialogScreen dialog = new ScheduleDialogScreen(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancel;
@@ -396,8 +361,8 @@ public class ScheduleDialogScreen extends javax.swing.JDialog {
     private javax.swing.JTextField jTextFieldTimeWorking;
     // End of variables declaration//GEN-END:variables
     
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
     }
     //habilita e desabilita as caixas de texto com base nas checkboxs
     public void verCheckBox(){
@@ -422,5 +387,21 @@ public class ScheduleDialogScreen extends javax.swing.JDialog {
                 jTextFieldBigBreak.setEnabled(true);
             }
         });
+    }
+    public void initScheduleInfo(){
+        jTextFieldName.setText(schedule.getName());
+        jTextAreaDescription.setText(schedule.getDescription());
+        jTextFieldTimeWorking.setText(String.valueOf(schedule.getTimeWorking()));
+        jTextFieldShortBreak.setText(String.valueOf(schedule.getShortBreak()));
+        jTextFieldBigBreak.setText(String.valueOf(schedule.getBigBreak()));
+        if(schedule.getTimeWorking() != 25){
+            jCheckBoxTimeWorking.setSelected(false);
+            jTextFieldTimeWorking.setEnabled(true);
+        }
+        if(schedule.getShortBreak() != 5 || schedule.getBigBreak()!= 25){
+            jCheckBoxBreak.setSelected(false);
+            jTextFieldShortBreak.setEnabled(true);
+            jTextFieldBigBreak.setEnabled(true);
+        }
     }
 }
