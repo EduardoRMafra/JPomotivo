@@ -16,20 +16,23 @@ import model.Task;
  *
  * @author Eduardo
  */
-public class ScheduleTaskDialogScreen extends javax.swing.JDialog {
+public class ScheduleTaskUpdateDialogScreen extends javax.swing.JDialog {
 
     private int userId; //serve para dizer qual usuário o cronograma pertence
     private int scheduleId;
+    private int scheduleTaskId;
     private ScheduleTaskController scheduleTaskController;
-    private TaskController taskController;
     private List<Task> tasks;
-    public ScheduleTaskDialogScreen(java.awt.Frame parent, boolean modal, int userId, int scheduleId) {
+    private TaskController taskController;
+    public ScheduleTaskUpdateDialogScreen(java.awt.Frame parent, boolean modal, ScheduleTask scheduleTask) {
         super(parent, modal);
         initComponents();
         scheduleTaskController = new ScheduleTaskController();
         taskController = new TaskController();
-        this.userId = userId;
-        this.scheduleId = scheduleId;
+        this.userId = scheduleTask.getIdUser();
+        this.scheduleId = scheduleTask.getIdSchedule();
+        this.scheduleTaskId = scheduleTask.getId();
+        
         boxItemList();
     }
 
@@ -154,22 +157,22 @@ public class ScheduleTaskDialogScreen extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonOkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonOkMouseClicked
-        // tenta salvar uma tarefa no cronograma
+        // tenta atualizar uma tarefa no cronograma
         try{
             //verifica se a tarefa está selecionada
             if(jComboBoxTask.getSelectedIndex() >= 0){
                 ScheduleTask scheduleTask = new ScheduleTask();
+                scheduleTask.setId(scheduleTaskId);
                 scheduleTask.setIdUser(userId);
                 scheduleTask.setIdSchedule(scheduleId);
                 scheduleTask.setSchTask(tasks.get(jComboBoxTask.getSelectedIndex()));
-                
-                //salva a tarefa no cronograma
-                scheduleTaskController.save(scheduleTask);
+                //atualizar a tarefa no cronograma
+                scheduleTaskController.update(scheduleTask);
 
-                JOptionPane.showMessageDialog(rootPane, "Tarefa salva com sucesso o cronograma");
+                JOptionPane.showMessageDialog(rootPane, "Tarefa atualizada com sucesso o cronograma");
                 this.dispose();
             }else{
-                JOptionPane.showMessageDialog(rootPane, "A Tarefa não foi salvo no cronograma, "
+                JOptionPane.showMessageDialog(rootPane, "A Tarefa não foi atualizada no cronograma, "
                         + "nenhum item foi selecionado!");
             }
         }

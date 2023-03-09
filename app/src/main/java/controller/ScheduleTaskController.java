@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import model.ScheduleTask;
+import model.Task;
 import util.ConnectionFactory;
 
 /**
@@ -13,7 +14,7 @@ import util.ConnectionFactory;
  * @author Eduardo
  */
 public class ScheduleTaskController {
-    public void add(ScheduleTask scheduleTask){
+    public void save(ScheduleTask scheduleTask){
                 String sql = "INSERT INTO scheduletasks (idUser, idSchedule, idTask) "
                 + "VALUES (?, ?, ?)";
         
@@ -29,7 +30,7 @@ public class ScheduleTaskController {
             //setando valores do statement
             statement.setInt(1, scheduleTask.getIdUser());
             statement.setInt(2, scheduleTask.getIdSchedule());
-            statement.setInt(3, scheduleTask.getIdTask());
+            statement.setInt(3, scheduleTask.getSchTask().getId());
 
             
             //executando a query
@@ -55,8 +56,8 @@ public class ScheduleTaskController {
             statement = conn.prepareStatement(sql);
             
             //setando valores do statement
-            statement.setInt(1, scheduleTask.getIdTask());
-            statement.setInt(3, scheduleTask.getId());
+            statement.setInt(1, scheduleTask.getSchTask().getId());
+            statement.setInt(2, scheduleTask.getId());
             
             //executando a query
             statement.execute();
@@ -92,15 +93,20 @@ public class ScheduleTaskController {
             ConnectionFactory.closeConnection(conn, statement);
         }
     }
-        public List<ScheduleTask> getAll(int idUser, int idSchedule){
-        
-        String sql = "SELECT * FROM scheduleTasks WHERE idUser = ? AND idSchedule = ?";
+        public List<ScheduleTask> getAll(int idSchedule, int idUser){
+        //Seleciona 2 tabelas do banco de dados e busca e junta dados especificos delas baseado no id das tarefas
+        //utilizando como filtro o idSchedule e o idUser para selecionar apenas aquelas tarefas que são de um
+        //cronograma e usuário invés de todos.
+        String sql = "SELECT tasks.id, tasks.name, tasks.description, tasks.completed, "
+                + "tasks.notes, tasks.deadline, scheduleTasks.id FROM tasks " 
+                + "JOIN scheduleTasks ON tasks.id = scheduleTasks.idTask "
+                + "WHERE scheduleTasks.idSchedule = ? AND tasks.idUser = ?";
         
         Connection conn = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         
-        List<ScheduleTask> scheduleTasks = new ArrayList<ScheduleTask>();
+        List<ScheduleTask> scheduleTasks = new ArrayList<>();
         
         try{
             //estabelecendo conexão com banco de dados
@@ -109,21 +115,26 @@ public class ScheduleTaskController {
             statement = conn.prepareStatement(sql);
             
             //setando valores do statement
-            statement.setInt(1, idUser);
-            statement.setInt(2, idSchedule);
-            
+            statement.setInt(1, idSchedule);
+            statement.setInt(2, idUser);
             //retorno execução query
             resultSet = statement.executeQuery();
             
             //enquanto existir algum valor a ser percorrido no resultSet
             while(resultSet.next()){
+                Task task = new Task();
+                task.setId(resultSet.getInt("id"));
+                task.setName(resultSet.getString("name"));
+                task.setDescription(resultSet.getString("description"));
+                task.setCompleted(resultSet.getBoolean("completed"));
+                task.setNotes(resultSet.getString("notes"));
+                task.setDeadline(resultSet.getDate("deadline"));
+                
                 ScheduleTask scheduleTask = new ScheduleTask();
-                scheduleTask.setId(resultSet.getInt("id"));
-                scheduleTask.setId(resultSet.getInt("idUser"));
-                scheduleTask.setId(resultSet.getInt("idSchedule"));
-                scheduleTask.setId(resultSet.getInt("idTask"));
-                
-                
+                scheduleTask.setId(resultSet.getInt("scheduleTasks.id"));
+                scheduleTask.setIdSchedule(idSchedule);
+                scheduleTask.setIdUser(idUser);
+                scheduleTask.setSchTask(task);
                 scheduleTasks.add(scheduleTask);
             }
         }catch(Exception ex){

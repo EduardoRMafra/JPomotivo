@@ -19,11 +19,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import model.Schedule;
+import model.ScheduleTask;
 import model.Task;
 import model.User;
 import util.ButtonColumnCellRender;
 import util.DeadlineColumnCellRender;
+import util.DeadlineColumnCellRenderScheduleTask;
 import util.ScheduleTableModel;
+import util.ScheduleTaskTableModel;
 import util.TaskTableModel;
 
 /**
@@ -42,17 +45,10 @@ public class MainScreen extends javax.swing.JFrame {
     private ScheduleTaskController scheduleTaskController;
     private TaskTableModel taskModel;
     private ScheduleTableModel scheduleModel;
+    private ScheduleTaskTableModel scheduleTaskModel;
     private User user;
+    private Schedule schedule;
     
-    /**
-     * Creates new form MainScreen
-     */
-    public MainScreen() {
-        initComponents();
-        initController();
-        
-        decorateTables();
-    }
     public MainScreen(User user) {
         initComponents();
         
@@ -113,6 +109,7 @@ public class MainScreen extends javax.swing.JFrame {
         jPanelScheduleTaskTable.setBackground(new java.awt.Color(18, 30, 49));
 
         jTableScheduleTask.setFont(new java.awt.Font("Comic Sans MS", 0, 12)); // NOI18N
+        jTableScheduleTask.setForeground(new java.awt.Color(255, 255, 255));
         jTableScheduleTask.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -137,6 +134,11 @@ public class MainScreen extends javax.swing.JFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        jTableScheduleTask.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableScheduleTaskMouseClicked(evt);
             }
         });
         jScrollPaneScheduleTask.setViewportView(jTableScheduleTask);
@@ -169,11 +171,13 @@ public class MainScreen extends javax.swing.JFrame {
 
         jButtonStart.setBackground(new java.awt.Color(0, 0, 0));
         jButtonStart.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
+        jButtonStart.setForeground(new java.awt.Color(255, 255, 255));
         jButtonStart.setText("Iniciar");
         jButtonStart.setBorder(null);
 
         jButtonStop.setBackground(new java.awt.Color(102, 102, 102));
         jButtonStop.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
+        jButtonStop.setForeground(new java.awt.Color(255, 255, 255));
         jButtonStop.setText("Parar");
         jButtonStop.setBorder(null);
 
@@ -209,11 +213,16 @@ public class MainScreen extends javax.swing.JFrame {
         jLabelScheduleTasksTitle.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
         jLabelScheduleTasksTitle.setForeground(new java.awt.Color(255, 255, 255));
         jLabelScheduleTasksTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelScheduleTasksTitle.setText("Tarefas");
+        jLabelScheduleTasksTitle.setText("Tarefas do Cronograma");
 
         jLabelScheduleTasksAdd.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
         jLabelScheduleTasksAdd.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelScheduleTasksAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/addIcon.png"))); // NOI18N
+        jLabelScheduleTasksAdd.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabelScheduleTasksAddMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelScheduleTaskTableLayout = new javax.swing.GroupLayout(jPanelScheduleTaskTable);
         jPanelScheduleTaskTable.setLayout(jPanelScheduleTaskTableLayout);
@@ -756,7 +765,7 @@ public class MainScreen extends javax.swing.JFrame {
         int rowIndex = jTableSchedule.rowAtPoint(evt.getPoint());
         int columnIndex = jTableSchedule.columnAtPoint(evt.getPoint());
         
-        Schedule schedule = scheduleModel.getSchedules().get(rowIndex);
+        schedule = scheduleModel.getSchedules().get(rowIndex);
         switch (columnIndex) {
             case 2:
                 //abre dialog screen de atualização de cronogramas
@@ -778,10 +787,57 @@ public class MainScreen extends javax.swing.JFrame {
                 break;
             default:
                 selectedMenu(jPanelScheduleTaskTable);
-                loadScheduleTask(user.getId(), schedule.getId());
+                loadScheduleTask( schedule.getId(), user.getId());
                 break;
         }
     }//GEN-LAST:event_jTableScheduleMouseClicked
+
+    private void jLabelScheduleTasksAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelScheduleTasksAddMouseClicked
+        // Abrindo janela de adicionar tarefas ao cronograma
+        ScheduleTaskDialogScreen scheduleTaskDialogScreen = new ScheduleTaskDialogScreen(this, rootPaneCheckingEnabled, 
+                user.getId(), schedule.getId());
+        
+        scheduleTaskDialogScreen.setVisible(true);
+        
+        scheduleTaskDialogScreen.addWindowListener(new WindowAdapter() {
+           public void windowClosed(WindowEvent e){
+               loadScheduleTask(schedule.getId(), user.getId());
+           } 
+        });
+    }//GEN-LAST:event_jLabelScheduleTasksAddMouseClicked
+
+    private void jTableScheduleTaskMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableScheduleTaskMouseClicked
+        // pegando a tarefa clicada na tabela atravez da posição do evento de clique do mouse
+        // pegar a tabela atravez da posição do evento que aconteceu na tela
+        int rowIndex = jTableScheduleTask.rowAtPoint(evt.getPoint());
+        int columnIndex = jTableScheduleTask.columnAtPoint(evt.getPoint());
+        
+        ScheduleTask scheduleTask = scheduleTaskModel.getScheduleTasks().get(rowIndex);
+
+        switch (columnIndex) {
+            case 3:
+                scheduleTaskController.update(scheduleTask);
+                break;
+            case 4:
+                //abre dialog screen de atualização de tarefas
+                ScheduleTaskUpdateDialogScreen scheduleTaskUpdateDialogScreen = new ScheduleTaskUpdateDialogScreen(this, rootPaneCheckingEnabled, scheduleTask);
+
+                scheduleTaskUpdateDialogScreen.setVisible(true);
+
+                scheduleTaskUpdateDialogScreen.addWindowListener(new WindowAdapter() {
+                   public void windowClosed(WindowEvent e){
+                       loadScheduleTask(schedule.getId(), user.getId());
+                   } 
+                });
+                break;            
+            case 5:
+                scheduleTaskController.removeById(scheduleTask.getId());
+                scheduleTaskModel.getScheduleTasks().remove(scheduleTask);
+                
+                loadScheduleTask(schedule.getId(), user.getId());
+                break;            
+        }
+    }//GEN-LAST:event_jTableScheduleTaskMouseClicked
     //muda o fundo do item que o mouse estiver em cima
     private void mouseOver(JPanel jPanel){
         if(jPanel.getBackground() == selectedColor){
@@ -813,6 +869,8 @@ public class MainScreen extends javax.swing.JFrame {
         jTableTask.setModel(taskModel);
         scheduleModel = new ScheduleTableModel();
         jTableSchedule.setModel(scheduleModel);
+        scheduleTaskModel = new ScheduleTaskTableModel();
+        jTableScheduleTask.setModel(scheduleTaskModel);
         
     }
     
@@ -821,40 +879,6 @@ public class MainScreen extends javax.swing.JFrame {
         selectedMenu(jPanelTasks);
         //carrega lista de tarefas
         loadTasks(user.getId());
-    }
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Java Swing".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainScreen().setVisible(true);
-            }
-        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -941,7 +965,7 @@ public class MainScreen extends javax.swing.JFrame {
         jTableScheduleTask.setRowHeight(40);
         
         jTableScheduleTask.getColumnModel().getColumn(2)
-                .setCellRenderer(new DeadlineColumnCellRender());
+                .setCellRenderer(new DeadlineColumnCellRenderScheduleTask());
         
         //adicionando os icones de atualizar e remover
         jTableScheduleTask.getColumnModel().getColumn(4)
@@ -965,8 +989,12 @@ public class MainScreen extends javax.swing.JFrame {
         
         showJMenuTable(2);
     }
-    public void loadScheduleTask(int idUser, int idSchedule){
+    public void loadScheduleTask(int idSchedule, int idUser){
+        List<ScheduleTask> scheduleTasks = scheduleTaskController.getAll(idSchedule, idUser);
+
+        scheduleTaskModel.setScheduleTasks(scheduleTasks);
         
+        showJMenuTable(3);
     }
     //esconde qualquer outro jPanel aberto dentro de jPanelContent e abre o 1 - jPanelTableTask, 2 - jPanelTableSchedules, 3 - jPanelTableScheduleTask
     public void showJMenuTable(int item){
@@ -982,15 +1010,24 @@ public class MainScreen extends javax.swing.JFrame {
             jPanelTaskTable.setVisible(false);
             jPanelContent.remove(jPanelTaskTable);
         }
-        if(item == 1){
-            jPanelContent.add(jPanelTaskTable);
-            jPanelTaskTable.setSize(jPanelContent.getWidth(), jPanelContent.getHeight());
-            jPanelTaskTable.setVisible(true);
-        }
-        else if(item == 2){
-            jPanelContent.add(jPanelScheduleTable);
-            jPanelScheduleTable.setSize(jPanelContent.getWidth(), jPanelContent.getHeight());
-            jPanelScheduleTable.setVisible(true);
+        switch (item) {
+            case 1:
+                jPanelContent.add(jPanelTaskTable);
+                jPanelTaskTable.setSize(jPanelContent.getWidth(), jPanelContent.getHeight());
+                jPanelTaskTable.setVisible(true);
+                break;
+            case 2:
+                jPanelContent.add(jPanelScheduleTable);
+                jPanelScheduleTable.setSize(jPanelContent.getWidth(), jPanelContent.getHeight());
+                jPanelScheduleTable.setVisible(true);
+                break;
+            case 3:
+                jPanelContent.add(jPanelScheduleTaskTable);
+                jPanelScheduleTaskTable.setSize(jPanelContent.getWidth(), jPanelContent.getHeight());
+                jPanelScheduleTaskTable.setVisible(true);
+                break;
+            default:
+                break;
         }
         jPanelContent.revalidate();
     }

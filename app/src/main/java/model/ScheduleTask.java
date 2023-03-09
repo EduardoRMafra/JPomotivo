@@ -8,16 +8,16 @@ public class ScheduleTask {
     private int id;
     private int idUser;
     private int idSchedule;
-    private int idTask;
+    private Task schTask;
 
     public ScheduleTask() {
     }
 
-    public ScheduleTask(int id, int idUser, int idSchedule, int idTask) {
+    public ScheduleTask(int id, int idUser, int idSchedule, Task scTask) {
         setId(id);
         setIdUser(idUser);
         setIdSchedule(idSchedule);
-        setIdTask(idTask);
+        setSchTask(scTask);
     }
 
     public int getId() {
@@ -44,16 +44,15 @@ public class ScheduleTask {
         this.idSchedule = idSchedule;
     }
 
-    public int getIdTask() {
-        return idTask;
+    public Task getSchTask() {
+        return schTask;
     }
 
-    public void setIdTask(int idTask) {
-        this.idTask = idTask;
+    public void setSchTask(Task schTask) {
+        this.schTask = schTask;
     }
-
     @Override
     public String toString() {
-        return "ScheduleTask{" + "id=" + id + ", idUser=" + idUser + ", idSchedule=" + idSchedule + ", idTask=" + idTask + '}';
+        return "ScheduleTask{" + "id=" + id + ", idUser=" + idUser + ", idSchedule=" + idSchedule + ", idTask=" + schTask.getId() + "}";
     }
 }
