@@ -61,7 +61,7 @@ public class ScheduleTaskUpdateDialogScreen extends javax.swing.JDialog {
         jLabelTitle.setFont(new java.awt.Font("Comic Sans MS", 1, 24)); // NOI18N
         jLabelTitle.setForeground(new java.awt.Color(255, 255, 255));
         jLabelTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelTitle.setText("Adicionar Tarefa");
+        jLabelTitle.setText("Atualizar Tarefa");
 
         javax.swing.GroupLayout jPanelHeaderLayout = new javax.swing.GroupLayout(jPanelHeader);
         jPanelHeader.setLayout(jPanelHeaderLayout);
