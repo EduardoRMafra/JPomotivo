@@ -1,6 +1,6 @@
 # JPomotivo
-- Recriando e aprimorando o aplicativo Pomotivo, criado por mim em C#.
-- Utilizando Java e banco de dados relacional.
+- O Aplicativo utiliza Java e banco de dados relacional.
+- Por isso precisamos importar o arquivo sql no phpMyAdmin e ativar o server local.
 
 O programa permite o usuário
 - Criar ou Entrar em um usuário já registrado.
