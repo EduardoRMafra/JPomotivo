@@ -14,7 +14,6 @@ public class Schedule {
     private Date createdAt;
     private Date updatedAt;
     private int timeWorking;
-    private boolean active;
     private int shortBreak;
     private int bigBreak;
 
@@ -24,14 +23,13 @@ public class Schedule {
     }
 
     
-    public Schedule(int id, int idUser, String name, String description, Date createdAt, Date updatedAt, boolean active,int timeWorking, int shortBreak, int bigBreak) {
+    public Schedule(int id, int idUser, String name, String description, Date createdAt, Date updatedAt,int timeWorking, int shortBreak, int bigBreak) {
         setId(id);
         setIdUser(idUser);
         setName(name);
         setDescription(description);
         setCreatedAt(createdAt);
         setUpdatedAt(updatedAt);
-        setActive(active);
         setTimeWorking(timeWorking);
         setShortBreak(shortBreak);
         setBigBreak(bigBreak);
@@ -85,14 +83,6 @@ public class Schedule {
         this.updatedAt = updatedAt;
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
     public int getTimeWorking() {
         return timeWorking;
     }
@@ -119,7 +109,7 @@ public class Schedule {
 
     @Override
     public String toString() {
-        return "Schedule{" + "id=" + id + ", idUser=" + idUser + ", name=" + name + ", description=" + description + ", createAt=" + createdAt + ", updatedAt=" + updatedAt + ", active=" + active + ", shortBreak=" + shortBreak + ", bigBreak=" + bigBreak + '}';
+        return "Schedule{" + "id=" + id + ", idUser=" + idUser + ", name=" + name + ", description=" + description + ", createAt=" + createdAt + ", updatedAt=" + updatedAt + ", shortBreak=" + shortBreak + ", bigBreak=" + bigBreak + '}';
     }
     
     

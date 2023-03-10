@@ -17,8 +17,8 @@ public class ScheduleController {
     
     public void save(Schedule schedule){
         String sql = "INSERT INTO schedules (idUser, name, description, "
-                + "createdAt, updatedAt, active, timeWorking, shortBreak, bigBreak) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + "createdAt, updatedAt, timeWorking, shortBreak, bigBreak) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         
         Connection conn = null;
         PreparedStatement statement = null;
@@ -35,10 +35,9 @@ public class ScheduleController {
             statement.setString(3, schedule.getDescription());
             statement.setDate(4, new Date(schedule.getCreatedAt().getTime()));
             statement.setDate(5, new Date(schedule.getUpdatedAt().getTime()));
-            statement.setBoolean(6, schedule.isActive());
-            statement.setInt(7, schedule.getTimeWorking());
-            statement.setInt(8, schedule.getShortBreak());
-            statement.setInt(9, schedule.getBigBreak());
+            statement.setInt(6, schedule.getTimeWorking());
+            statement.setInt(7, schedule.getShortBreak());
+            statement.setInt(8, schedule.getBigBreak());
 
             
             //executando a query
@@ -53,7 +52,7 @@ public class ScheduleController {
     
     public void update(Schedule schedule){
         String sql = "UPDATE schedules SET idUser = ?, name = ?, description = ?, createdAt = ?, "
-        + "updatedAt = ?, active = ?, timeWorking = ?, shortBreak = ?, bigBreak = ? WHERE id = ?";
+        + "updatedAt = ?, timeWorking = ?, shortBreak = ?, bigBreak = ? WHERE id = ?";
         
             Connection conn = null;
             PreparedStatement statement = null;
@@ -70,11 +69,10 @@ public class ScheduleController {
             statement.setString(3, schedule.getDescription());
             statement.setDate(4, new Date(schedule.getCreatedAt().getTime()));
             statement.setDate(5, new Date(schedule.getUpdatedAt().getTime()));
-            statement.setBoolean(6, schedule.isActive());
-            statement.setInt(7, schedule.getTimeWorking());
-            statement.setInt(8, schedule.getShortBreak());
-            statement.setInt(9, schedule.getBigBreak());
-            statement.setInt(10, schedule.getId());
+            statement.setInt(6, schedule.getTimeWorking());
+            statement.setInt(7, schedule.getShortBreak());
+            statement.setInt(8, schedule.getBigBreak());
+            statement.setInt(9, schedule.getId());
             
             //executando a query
             statement.execute();
@@ -119,7 +117,7 @@ public class ScheduleController {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         
-        List<Schedule> schedules = new ArrayList<Schedule>();
+        List<Schedule> schedules = new ArrayList<>();
         
         try{
             //estabelecendo conexão com banco de dados
@@ -142,7 +140,6 @@ public class ScheduleController {
                 schedule.setDescription(resultSet.getString("description"));
                 schedule.setCreatedAt(resultSet.getDate("createdAt"));
                 schedule.setUpdatedAt(resultSet.getDate("updatedAt"));
-                schedule.setActive(resultSet.getBoolean("active"));
                 schedule.setTimeWorking(resultSet.getInt("timeWorking"));
                 schedule.setShortBreak(resultSet.getInt("shortBreak"));
                 schedule.setBigBreak(resultSet.getInt("bigBreak"));

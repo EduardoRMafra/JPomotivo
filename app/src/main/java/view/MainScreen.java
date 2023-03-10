@@ -13,11 +13,16 @@ import java.awt.Font;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
-import javax.swing.DefaultListModel;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import model.Schedule;
 import model.ScheduleTask;
 import model.Task;
@@ -43,9 +48,20 @@ public class MainScreen extends javax.swing.JFrame {
     private TaskController taskController;
     private ScheduleController scheduleController;
     private ScheduleTaskController scheduleTaskController;
+    
     private TaskTableModel taskModel;
     private ScheduleTableModel scheduleModel;
     private ScheduleTaskTableModel scheduleTaskModel;
+    
+    private Timer timer;
+    private int seconds;
+    private boolean isBreak;
+    private int breaks; //quantidade de intervalos
+    private Clip clip; //som despertador
+    private ScheduledExecutorService executor;
+    private boolean isRunning = false; //verifica se o timer está ativo
+
+    
     private User user;
     private Schedule schedule;
     
@@ -60,6 +76,7 @@ public class MainScreen extends javax.swing.JFrame {
         decorateTables();
         
         initFirstPanel();
+        loadSound(); //carrega o som dos sistemas
     }
 
     /**
@@ -148,10 +165,11 @@ public class MainScreen extends javax.swing.JFrame {
         jLabel1.setText("Cronometro");
         jLabel1.setToolTipText("");
 
-        jPanelTimerText.setBackground(new java.awt.Color(255, 51, 51));
+        jPanelTimerText.setBackground(new java.awt.Color(0, 0, 0));
 
         jLabelTimer.setBackground(new java.awt.Color(255, 255, 255));
-        jLabelTimer.setFont(new java.awt.Font("Comic Sans MS", 0, 12)); // NOI18N
+        jLabelTimer.setFont(new java.awt.Font("Comic Sans MS", 1, 12)); // NOI18N
+        jLabelTimer.setForeground(new java.awt.Color(255, 255, 255));
         jLabelTimer.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelTimer.setText("00:30:00");
 
@@ -174,12 +192,22 @@ public class MainScreen extends javax.swing.JFrame {
         jButtonStart.setForeground(new java.awt.Color(255, 255, 255));
         jButtonStart.setText("Iniciar");
         jButtonStart.setBorder(null);
+        jButtonStart.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonStartMouseClicked(evt);
+            }
+        });
 
         jButtonStop.setBackground(new java.awt.Color(102, 102, 102));
         jButtonStop.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
         jButtonStop.setForeground(new java.awt.Color(255, 255, 255));
         jButtonStop.setText("Parar");
         jButtonStop.setBorder(null);
+        jButtonStop.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonStopMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelTimerLayout = new javax.swing.GroupLayout(jPanelTimer);
         jPanelTimer.setLayout(jPanelTimerLayout);
@@ -787,6 +815,9 @@ public class MainScreen extends javax.swing.JFrame {
                 break;
             default:
                 selectedMenu(jPanelScheduleTaskTable);
+                seconds = schedule.getTimeWorking() * 60;
+                breaks = 0;
+                timerFormat();
                 loadScheduleTask( schedule.getId(), user.getId());
                 break;
         }
@@ -838,6 +869,14 @@ public class MainScreen extends javax.swing.JFrame {
                 break;            
         }
     }//GEN-LAST:event_jTableScheduleTaskMouseClicked
+
+    private void jButtonStartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonStartMouseClicked
+        startTimer();
+    }//GEN-LAST:event_jButtonStartMouseClicked
+
+    private void jButtonStopMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonStopMouseClicked
+        stopTimer();
+    }//GEN-LAST:event_jButtonStopMouseClicked
     //muda o fundo do item que o mouse estiver em cima
     private void mouseOver(JPanel jPanel){
         if(jPanel.getBackground() == selectedColor){
@@ -854,6 +893,7 @@ public class MainScreen extends javax.swing.JFrame {
     }
     //muda o fundo do item de menu selecionado
     private void selectedMenu(JPanel selected){
+        stopTimer();//ao sair do cronograma para o contador
         jPanelSchedules.setBackground(defaultColor);
         jPanelTasks.setBackground(defaultColor);
         if(selected != jPanelScheduleTaskTable){
@@ -993,7 +1033,7 @@ public class MainScreen extends javax.swing.JFrame {
         List<ScheduleTask> scheduleTasks = scheduleTaskController.getAll(idSchedule, idUser);
 
         scheduleTaskModel.setScheduleTasks(scheduleTasks);
-        
+
         showJMenuTable(3);
     }
     //esconde qualquer outro jPanel aberto dentro de jPanelContent e abre o 1 - jPanelTableTask, 2 - jPanelTableSchedules, 3 - jPanelTableScheduleTask
@@ -1030,5 +1070,87 @@ public class MainScreen extends javax.swing.JFrame {
                 break;
         }
         jPanelContent.revalidate();
+    }
+    private void timerFormat(){
+        int hour = seconds / 3600;
+        int min = (seconds % 3600) / 60;
+        int sec = seconds % 60;
+        jLabelTimer.setText(String.format("%02d:%02d:%02d", hour, min, sec));
+    }
+    private void startTimer(){
+        if(!isRunning){
+            isRunning = true;
+            timer = new Timer(1000, e -> {
+                if(seconds > 0){
+                    seconds--;
+                    timerFormat();
+                }
+                else{
+                    stopTimer();
+                    //muda de intervalo para trabalho e de trabalho para intervalo
+                    isBreak = !isBreak;
+                    //verifica se é intervalo ou tempo de trabalhar e atribui o valor em segundos
+                    setTimerInfo();
+                    //ativa o som de despertador por 2 segundos
+                    clip.start();
+                    //tocar por 2 segundos
+                    executor = Executors.newSingleThreadScheduledExecutor();
+                    executor.schedule(() -> clip.stop(), 2, TimeUnit.SECONDS);
+                    timerFormat();
+                    startTimer();
+                }
+            });
+            if(isBreak == false){
+                jPanelTimerText.setBackground(new Color(0,255,0));
+            }
+            else{
+                jPanelTimerText.setBackground(new Color(255,0,0));
+            }
+            timer.start();
+        }
+    }
+    private void stopTimer(){
+        if(isRunning){
+            isRunning = false;
+            timer.stop();
+            if (executor != null) {
+            executor.shutdownNow();
+            }
+            jPanelTimerText.setBackground(new Color(0,0,0));
+        }
+    }
+    
+    private boolean isBigBreak(){
+        return breaks % 4 == 0;
+    }
+    private void setTimerInfo(){
+        if(isBreak == false){
+            jPanelTimerText.setBackground(new Color(0,255,0));
+            seconds = schedule.getTimeWorking()* 60;
+        }
+        else{
+            jPanelTimerText.setBackground(new Color(255,0,0));
+            breaks++;
+            if(isBigBreak()){
+                seconds = schedule.getBigBreak() * 60;
+            }
+            else{
+                seconds = schedule.getShortBreak()* 60;
+            }
+        }
+    }
+    private void loadSound(){
+        //utilizando uma thread separada para quando tocar o audio não ter atrasos
+        new Thread(() -> {
+            try {
+                clip = AudioSystem.getClip();
+                clip.open(AudioSystem.getAudioInputStream(getClass().getResourceAsStream("/alarm.wav")));
+                //deixa o som em loop para nunca acabar.
+                clip.loop(Clip.LOOP_CONTINUOUSLY);
+                clip.stop();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(jPanelContent, "Não foi possível carregar o arquivo de audio do despertador! " + e.getMessage());
+            }
+        }).start();
     }
 }
